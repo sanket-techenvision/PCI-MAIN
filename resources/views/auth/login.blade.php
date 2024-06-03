@@ -192,37 +192,37 @@
 
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
-                                <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
+                                <p class="text-muted mb-4">Enter your Mobile Number and password to access admin panel.</p>
                             </div>
 
                             <form method="POST" action="{{ route('login') }}">
-                                @if (sizeof($errors) > 0)
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li class="text-danger">{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                @endif
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="emailaddress" class="form-label">Email address</label>
-                                    <input class="form-control" type="email" id="emailaddress" required="" placeholder="Enter your email" value="attex@coderthemes.com" name="email">
+                                    <label for="mobile" class="form-label">Mobile No.</label>
+                                    <input class="form-control @error('user_mobile') is-invalid @enderror" type="number" id="mobile" required="" placeholder="Enter your mobile number" value="{{ old('user_mobile') }}" name="user_mobile">
+                                    @error('user_mobile')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <a href="{{ route('second', ['auth', 'recoverpw']) }}" class="text-muted float-end fs-12">Forgot your password?</a>
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group input-group-merge">
-                                        <input type="password" id="password" class="form-control" placeholder="Enter your password" value="password" name="password">
+                                        <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password" value="" name="password" required>
                                         <div class="input-group-text" data-password="false">
                                             <span class="password-eye"></span>
                                         </div>
+                                        @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                     </div>
+                                    
                                 </div>
 
                                 <div class="mb-3 mb-3">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
+                                        <input type="checkbox" class="form-check-input" id="checkbox-signin" name="remember" {{ old('remember') ? 'checked' : '' }}>
                                         <label class="form-check-label" for="checkbox-signin">Remember me</label>
                                     </div>
                                 </div>
@@ -232,13 +232,14 @@
                                 </div>
 
                             </form>
+
                         </div> <!-- end card-body -->
                     </div>
                     <!-- end card -->
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p class="text-muted bg-body">Don't have an account? <a href="{{ route('second', ['auth', 'register']) }}" class="text-muted ms-1 link-offset-3 text-decoration-underline"><b>Sign Up</b></a></p>
+                            <p class="text-muted bg-body">Don't have an account? <a href="{{ route('register') }}" class="text-muted ms-1 link-offset-3 text-decoration-underline"><b>Sign Up</b></a></p>
                         </div> <!-- end col -->
                     </div>
                     <!-- end row -->

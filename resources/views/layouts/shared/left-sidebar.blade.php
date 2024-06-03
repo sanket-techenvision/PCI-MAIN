@@ -45,7 +45,6 @@
         <ul class="side-nav">
 
             <li class="side-nav-title">Navigation</li>
-
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
                     <i class="ri-home-4-line"></i>
@@ -63,7 +62,14 @@
                     </ul>
                 </div>
             </li>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+            <li class="side-nav-item">
+                <a href="{{ route('serviceCategories.index') }}" class="side-nav-link {{ Request::is('serviceCategories*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>Service Categories</p>
+                </a>
+            </li>
             <li class="side-nav-title">Apps</li>
 
             <li class="side-nav-item">

@@ -32,18 +32,29 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
+        // dd($request);
+        $validatedData = $request->validate([
+            'user_first_name' => 'required|string|max:255',
+            'user_last_name' => 'required|string|max:255',
+            'user_mobile' => 'required|string|min:10|max:10|unique:users,user_mobile',
+            'user_email' => 'required|string|email|max:255|unique:users,user_email',
+            'password' => 'required|string|confirmed|min:8|max:255',
+            'user_city' => 'required|string|max:255',
+            'user_state' => 'required|string|max:255',
+            'user_country' => 'required|string|max:255',
         ]);
-
+        
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'user_first_name' => $validatedData['user_first_name'],
+            'user_last_name' => $validatedData['user_last_name'],
+            'user_mobile' => $validatedData['user_mobile'],
+            'user_email' => $validatedData['user_email'],
+            'password' => Hash::make(($validatedData['password'])), 
+            'user_city' => $validatedData['user_city'],
+            'user_state' => $validatedData['user_state'],
+            'user_country' => $validatedData['user_country'],
         ]);
-
+    
         event(new Registered($user));
 
         Auth::login($user);
