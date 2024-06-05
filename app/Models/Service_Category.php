@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Service_Category extends Model
 {
     public $table = 'service_categories';
+    protected $primaryKey = 'service_cat_id';
 
+    public function subCategories()
+    {
+        return $this->hasMany(Service_Sub_Category::class, 'service_cat_id', 'service_cat_id');
+    }
     public $fillable = [
         'service_cat_name',
         'service_cat_description',
@@ -33,6 +38,7 @@ class Service_Category extends Model
         'cat_created_by' => 'nullable|string|max:255',
         'cat_updated_by' => 'nullable|string|max:255'
     ];
+
 
     
 }

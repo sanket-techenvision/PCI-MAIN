@@ -184,9 +184,9 @@
                 <div class="col-xxl-6 col-lg-6">
                     <div class="card">
                         <!-- Logo-->
-                        <div class="card-header py-4 text-center bg-primary">
+                        <div class="card-header py-4 text-center" style="background-color: #f9f9f9">
                             <a href="{{ route('any', 'index') }}">
-                                <span><img src="/images/logo.png" alt="logo" height="22"></span>
+                                <span><img src="/images/pci/logo.png" alt="logo" height=""></span>
                             </a>
                         </div>
 

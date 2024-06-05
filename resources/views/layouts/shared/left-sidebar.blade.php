@@ -2,24 +2,12 @@
 <div class="leftside-menu">
 
     <!-- Brand Logo Light -->
-    <a href="{{ route('any', 'index') }}" class="logo logo-light">
-        <span class="logo-lg">
-            <img src="/images/logo.png" alt="logo">
-        </span>
-        <span class="logo-sm">
-            <img src="/images/logo-sm.png" alt="small logo">
+    <a href="{{ route('any', 'index') }}" class="logo logo-light" style="background-color: #f9f9f9;">
+        <span class="">
+            <img src="/images/pci/logo.png" alt="logo" class="img-fluid">
         </span>
     </a>
 
-    <!-- Brand Logo Dark -->
-    <a href="{{ route('any', 'index') }}" class="logo logo-dark">
-        <span class="logo-lg">
-            <img src="/images/logo-dark.png" alt="logo">
-        </span>
-        <span class="logo-sm">
-            <img src="/images/logo-sm.png" alt="small logo">
-        </span>
-    </a>
 
     <!-- Sidebar Hover Menu Toggle Button -->
     <div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right" title="Show Full Sidebar">
@@ -33,44 +21,49 @@
 
     <!-- Sidebar -left -->
     <div class="h-100" id="leftside-menu-container" data-simplebar>
-        <!-- Leftbar User -->
-        <div class="leftbar-user">
-            <a href="{{ route('second', ['pages', 'profile']) }}">
-                <img src="/images/users/avatar-1.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
-                <span class="leftbar-user-name mt-2">Tosha Minner</span>
-            </a>
-        </div>
-
         <!--- Sidemenu -->
         <ul class="side-nav">
 
             <li class="side-nav-title">Navigation</li>
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
-                    <i class="ri-home-4-line"></i>
-                    <span class="badge bg-success float-end">2</span>
-                    <span> Dashboards </span>
+                <a href="{{ route('any', '/home') }}" class="side-nav-link">
+                <i class="ri-dashboard-2-line"></i>
+                    <span>Dashboard</span>
                 </a>
-                <div class="collapse" id="sidebarDashboards">
+            </li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarServiceCategories" aria-expanded="false" aria-controls="sidebarServiceCategories" class="side-nav-link">
+                    <i class="ri-pages-line"></i>
+                    <span>Services</span>
+                </a>
+                <div class="collapse" id="sidebarServiceCategories">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="{{ route('any', 'analytics') }}">Analytics</a>
+                            <a href="{{ route('serviceCategories.index') }}">Service Categories</a>
                         </li>
                         <li>
-                            <a href="{{ route('any', 'index') }}">Ecommerce</a>
+                            <a href="{{ route('service_sub_categories.index') }}">Service Sub Categories</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('serviceSubSubCategories.index') }}">Service Sub Sub Categories</a>
                         </li>
                     </ul>
                 </div>
             </li>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
             <li class="side-nav-item">
-                <a href="{{ route('serviceCategories.index') }}" class="side-nav-link {{ Request::is('serviceCategories*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-home"></i>
-                    <p>Service Categories</p>
+                <a href="{{ route('banks.index') }}" class="side-nav-link">
+                    <i class="ri-bank-line"></i>
+                    <span>Banks</span>
                 </a>
             </li>
-            <li class="side-nav-title">Apps</li>
+            <li class="side-nav-item">
+                <a href="{{ route('drafts.index') }}" class="side-nav-link">
+                    <i class="ri-file-line"></i>
+                    <span>Drafts</span>
+                </a>
+            </li>
+            <!-- <li class="side-nav-title">Apps</li>
 
             <li class="side-nav-item">
                 <a href="{{ route('second', ['apps', 'calendar']) }}" class="side-nav-link">
@@ -636,7 +629,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> -->
 
 
         </ul>

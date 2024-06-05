@@ -38,6 +38,25 @@
     @include('layouts.shared/footer-script')
     @vite(['resources/js/app.js', 'resources/js/layout.js'])
     @yield('script')
+    <script>
+        @if(session('success'))
+        Swal.fire({
+            title: 'Success!',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+        @endif
+
+        @if($errors->any())
+        Swal.fire({
+            title: 'Error!',
+            text: "{{ $errors->first() }}",
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        @endif
+    </script>
 
 </body>
 

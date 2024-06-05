@@ -3,12 +3,10 @@
         <table class="table" id="service_-categories-table">
             <thead>
             <tr>
-                <th>Service Cat Name</th>
-                <th>Service Cat Description</th>
-                <th>Service Cat Status</th>
-                <th>Cat Created By</th>
-                <th>Cat Updated By</th>
-                <th colspan="3">Action</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -17,20 +15,18 @@
                     <td>{{ $serviceCategory->service_cat_name }}</td>
                     <td>{{ $serviceCategory->service_cat_description }}</td>
                     <td>{{ $serviceCategory->service_cat_status }}</td>
-                    <td>{{ $serviceCategory->cat_created_by }}</td>
-                    <td>{{ $serviceCategory->cat_updated_by }}</td>
                     <td  style="width: 120px">
-                        {!! Form::open(['route' => ['serviceCategories.destroy', $serviceCategory->id], 'method' => 'delete']) !!}
+                        {!! Form::open(['route' => ['serviceCategories.destroy', $serviceCategory->service_cat_id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
-                            <a href="{{ route('serviceCategories.show', [$serviceCategory->id]) }}"
-                               class='btn btn-default btn-xs'>
-                                <i class="far fa-eye"></i>
+                            <a href="{{ route('serviceCategories.show', [$serviceCategory->service_cat_id]) }}"
+                               class='btn btn-default'>
+                               <i class="ri-eye-fill"></i>
                             </a>
-                            <a href="{{ route('serviceCategories.edit', [$serviceCategory->id]) }}"
-                               class='btn btn-default btn-xs'>
-                                <i class="far fa-edit"></i>
+                            <a href="{{ route('serviceCategories.edit', [$serviceCategory->service_cat_id]) }}"
+                               class='btn btn-default'>
+                               <i class="ri-edit-box-line"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                            {!! Form::button('<i class="ri-delete-bin-line"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>

@@ -1,12 +1,12 @@
-@extends('layouts.vertical', ['page_title' => 'Apex Area'])
+@extends('layouts.vertical', ['page_title' => 'Add Service Category'])
 
 @section('content')
-    <section class="content-header">
+    <section class="content-header p-3">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                    Create Service  Categories
+                    Add Service Categories
                     </h1>
                 </div>
             </div>
