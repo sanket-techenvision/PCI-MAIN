@@ -37,8 +37,9 @@ class DraftsController extends AppBaseController
     /**
      * Show the form for creating a new Drafts.
      */
-    public function create()
+    public function create(Request $request)
     {
+        dd($request);
         $serviceCats = Service_Category::all();
         $drafts_types = DB::table('draft_types')->select('*')->get();
 

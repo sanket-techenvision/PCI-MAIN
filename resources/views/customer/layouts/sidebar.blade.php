@@ -2,7 +2,7 @@
 <div class="leftside-menu">
 
     <!-- Brand Logo Light -->
-    <a href="{{ route('home') }}" class="logo logo-light" style="background-color: #f9f9f9;">
+    <a href="{{ route('customer-home') }}" class="logo logo-light" style="background-color: #f9f9f9;">
         <span class="">
             <img src="/images/pci/logo.png" alt="logo" class="img-fluid">
         </span>
@@ -26,7 +26,7 @@
 
             <li class="side-nav-title">Navigation</li>
             <li class="side-nav-item">
-                <a href="{{ route('home') }}" class="side-nav-link">
+                <a href="{{ route('customer-home') }}" class="side-nav-link">
                     <i class="ri-dashboard-2-line"></i>
                     <span>Dashboard</span>
                 </a>
@@ -35,38 +35,20 @@
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarServiceCategories" aria-expanded="false" aria-controls="sidebarServiceCategories" class="side-nav-link">
                     <i class="ri-pages-line"></i>
-                    <span>Services</span>
+                    <span>Drafts</span>
                 </a>
                 <div class="collapse" id="sidebarServiceCategories">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="{{ route('serviceCategories.index') }}">Service Categories</a>
+                            <a href="{{ route('drafts.create') }}">Create Draft</a>
                         </li>
                         <li>
-                            <a href="{{ route('service_sub_categories.index') }}">Service Sub Categories</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('serviceSubSubCategories.index') }}">Service Sub Sub Categories</a>
+                            <a href="{{ route('drafts.index') }}">My Drafts</a>
                         </li>
                     </ul>
                 </div>
             </li>
-            <li class="side-nav-item">
-                <a href="{{ route('banks.index') }}" class="side-nav-link">
-                    <i class="ri-bank-line"></i>
-                    <span>Banks</span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="{{ route('drafts.index') }}" class="side-nav-link">
-                    <i class="ri-file-line"></i>
-                    <span>Drafts</span>
-                </a>
-            </li>
         </ul>
         <!--- End Sidemenu -->
-
-        <div class="clearfix"></div>
     </div>
 </div>
-<!-- ========== Left Sidebar End ========== -->

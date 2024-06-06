@@ -5,6 +5,7 @@
     @include('layouts.shared/title-meta', ['title' => 'Register'])
     @include('layouts.shared/head-css')
     @vite(['resources/js/head.js'])
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/css/intlTelInput.css">
 </head>
 
 <body class="authentication-bg">
@@ -185,7 +186,7 @@
                     <div class="card">
                         <!-- Logo-->
                         <div class="card-header py-4 text-center" style="background-color: #f9f9f9">
-                            <a href="{{ route('any', 'index') }}">
+                            <a href="{{ route('register') }}">
                                 <span><img src="/images/pci/logo.png" alt="logo" height=""></span>
                             </a>
                         </div>
@@ -199,7 +200,7 @@
                             <div class="mb-3">
                                 <p class="text-muted">Fields marked with <span class="text-danger">*</span> are required.</p>
                             </div>
-                            <form action="{{ route('register') }}" method="POST" class="row g-3">
+                            <form name="register-form" id="register-form" action="{{ route('register') }}" method="POST" class="row g-3">
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="user_first_name" class="form-label">First Name<span class="text-danger">*</span></label>
@@ -217,7 +218,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="user_mobile" class="form-label">Mobile Number<span class="text-danger">*</span></label>
-                                    <input class="form-control @error('user_mobile') is-invalid @enderror" type="number" id="user_mobile" name="user_mobile" placeholder="Enter your mobile number" value="{{ old('user_mobile') }}" required>
+                                    <input class="form-control @error('user_mobile') is-invalid @enderror" type="tel" id="user_mobile" name="user_mobile" placeholder="Enter your mobile number" value="{{ old('user_mobile') }}" required>
                                     @error('user_mobile')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -241,25 +242,25 @@
                                     <input class="form-control" type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="user_city" class="form-label">City<span class="text-danger">*</span></label>
-                                    <input class="form-control @error('user_city') is-invalid @enderror" type="text" id="user_city" name="user_city" placeholder="Enter your city" value="{{ old('user_city') }}" required>
-                                    @error('user_city')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="user_country" class="form-label">Country<span class="text-danger">*</span></label>
+                                    <select class="form-control" id="user_country" name="user_country" required>
+                                        <option value="">Select Country</option>
+                                        @foreach($countries as $country)
+                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="user_state" class="form-label">State<span class="text-danger">*</span></label>
-                                    <input class="form-control @error('user_state') is-invalid @enderror" type="text" id="user_state" name="user_state" placeholder="Enter your state" value="{{ old('user_state') }}" required>
-                                    @error('user_state')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <select class="form-control" id="user_state" name="user_state" required>
+                                        <option value="">Select State</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="user_country" class="form-label">Country<span class="text-danger">*</span></label>
-                                    <input class="form-control @error('user_country') is-invalid @enderror" type="text" id="user_country" name="user_country" placeholder="Enter your country" value="{{ old('user_country') }}" required>
-                                    @error('user_country')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="user_city" class="form-label">City<span class="text-danger">*</span></label>
+                                    <select class="form-control" id="user_city" name="user_city" required>
+                                        <option value="">Select City</option>
+                                    </select>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check">
@@ -270,6 +271,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <input type="hidden" id="mobile_country_code" name="mobile_country_code">
                                 <div class="col-12 text-center">
                                     <button class="btn btn-primary" type="submit">Sign Up</button>
                                 </div>
@@ -301,7 +303,7 @@
         <span class="bg-body">
             <script>
                 document.write(new Date().getFullYear())
-            </script> © Attex - Coderthemes.com
+            </script> © PCI
         </span>
     </footer>
     <!-- Footer End-->
@@ -309,6 +311,68 @@
     @vite(['resources/js/app.js'])
     @include('layouts.shared/footer-script')
     <!-- end page -->
+
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/intlTelInput.min.js"></script>
+    <script>
+        const input = document.querySelector("#user_mobile");
+        const iti = window.intlTelInput(input, {
+            separateDialCode: true,
+            initialCountry: "in",
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/utils.js",
+        });
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const countryData = iti.getSelectedCountryData();
+            const mobile_country_code = countryData.dialCode;
+            document.getElementById('mobile_country_code').value = mobile_country_code;
+            this.submit();
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#user_country').change(function() {
+                var countryId = $(this).val();
+                $('#user_state').html('<option value="">Select State</option>');
+                $('#user_city').html('<option value="">Select City</option>');
+
+                if (countryId) {
+                    $.ajax({
+                        url: '/get-states/' + countryId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $.each(data, function(key, value) {
+                                $('#user_state').append('<option value="' + value.id + '">' + value.name + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('#user_state').change(function() {
+                var stateId = $(this).val();
+                $('#user_city').html('<option value="">Select City</option>');
+
+                if (stateId) {
+                    $.ajax({
+                        url: '/get-cities/' + stateId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $.each(data, function(key, value) {
+                                $('#user_city').append('<option value="' + value.id + '">' + value.name + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
 </body>
 

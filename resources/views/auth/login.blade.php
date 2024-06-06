@@ -183,7 +183,7 @@
 
                         <!-- Logo -->
                         <div class="card-header py-4 text-center" style="background-color: #f9f9f9">
-                            <a href="{{ route('any', 'index') }}ml">
+                            <a href="{{ route('login') }}">
                                 <span><img src="/images/pci/logo.png" alt="logo" class="img-fluid" height=""></span>
                             </a>
                         </div>
@@ -192,7 +192,7 @@
 
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
-                                <p class="text-muted mb-4">Enter your Mobile Number and password to access admin panel.</p>
+                                <p class="text-muted mb-4">Enter your Mobile Number and password to access your panel.</p>
                             </div>
 
                             <form method="POST" action="{{ route('login') }}">
@@ -206,7 +206,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <a href="{{ route('second', ['auth', 'recoverpw']) }}" class="text-muted float-end fs-12">Forgot your password?</a>
+                                    <a href="" class="text-muted float-end fs-12">Forgot your password?</a>
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password" value="" name="password" required>
@@ -214,10 +214,10 @@
                                             <span class="password-eye"></span>
                                         </div>
                                         @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    
+
                                 </div>
 
                                 <div class="mb-3 mb-3">
@@ -256,7 +256,7 @@
         <span class="bg-body">
             <script>
                 document.write(new Date().getFullYear())
-            </script> © Attex - Coderthemes.com
+            </script> © PCI
         </span>
     </footer>
     @vite(['resources/js/app.js'])

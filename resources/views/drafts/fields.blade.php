@@ -27,17 +27,6 @@
 
 <!-- Bank Id Field -->
 <div class="form-group col-sm-6 mb-2">
-    <label for="draft_id">Select Draft Type</label>
-    <select id="draft_id" class="form-control" required>
-        <option value="">Select Draft Type</option>
-        @foreach ($drafts_types as $draftype)
-        <option value="{{$draftype->draftType_id}}">{{$draftype->draft_type}}</option>
-        @endforeach
-    </select>
-</div>
-
-<!-- Bank Id Field -->
-<div class="form-group col-sm-6 mb-2">
     <label for="bank_id">Select Issuer Bank</label>
     <select id="bank_id" class="form-control" required>
         <option value="">Select Issuer Bank</option>

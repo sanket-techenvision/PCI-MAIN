@@ -132,8 +132,8 @@ class BanksController extends AppBaseController
     }
     public function getBanksData($subCategoryId){
         // dd($subCategoryId);
-        $banks = $this->banksRepository->all()->pluck('bank_name','bank_id');
-        $data = Banks::whereJsonContains('service_sub_cat_id', $subCategoryId)->get();
+        // $banks = $this->banksRepository->all()->pluck('bank_name','bank_id');
+        $data = Banks::whereJsonContains('service_sub_cat_id', $subCategoryId)->pluck('bank_name','bank_id');
         return response()->json($data);
     }
 }
