@@ -5,7 +5,7 @@
     @include('layouts.shared/title-meta')
     @yield('css')
     @include('layouts.shared/head-css')
-
+    
     @vite(['resources/js/head.js'])
 </head>
 

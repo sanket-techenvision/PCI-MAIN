@@ -2,7 +2,7 @@
 <div class="leftside-menu">
 
     <!-- Brand Logo Light -->
-    <a href="{{ route('customer-home') }}" class="logo logo-light" style="background-color: #f9f9f9;">
+    <a href="{{ route('customer-dashboard') }}" class="logo logo-light" style="background-color: #f9f9f9;">
         <span class="">
             <img src="/images/pci/logo.png" alt="logo" class="img-fluid">
         </span>
@@ -26,7 +26,7 @@
 
             <li class="side-nav-title">Navigation</li>
             <li class="side-nav-item">
-                <a href="{{ route('customer-home') }}" class="side-nav-link">
+                <a href="{{ route('customer-dashboard') }}" class="side-nav-link">
                     <i class="ri-dashboard-2-line"></i>
                     <span>Dashboard</span>
                 </a>
@@ -40,10 +40,10 @@
                 <div class="collapse" id="sidebarServiceCategories">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="{{ route('drafts.create') }}">Create Draft</a>
+                            <a href="{{ route('customer-drafts.create') }}">Apply for service</a>
                         </li>
                         <li>
-                            <a href="{{ route('drafts.index') }}">My Drafts</a>
+                            <a href="{{ route('customer-drafts.index') }}">My Drafts</a>
                         </li>
                     </ul>
                 </div>

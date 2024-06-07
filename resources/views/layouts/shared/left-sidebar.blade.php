@@ -2,7 +2,7 @@
 <div class="leftside-menu">
 
     <!-- Brand Logo Light -->
-    <a href="{{ route('home') }}" class="logo logo-light" style="background-color: #f9f9f9;">
+    <a href="{{ route('admin-dashboard') }}" class="logo logo-light" style="background-color: #f9f9f9;">
         <span class="">
             <img src="/images/pci/logo.png" alt="logo" class="img-fluid">
         </span>
@@ -26,7 +26,7 @@
 
             <li class="side-nav-title">Navigation</li>
             <li class="side-nav-item">
-                <a href="{{ route('home') }}" class="side-nav-link">
+                <a href="{{ route('admin-dashboard') }}" class="side-nav-link">
                     <i class="ri-dashboard-2-line"></i>
                     <span>Dashboard</span>
                 </a>

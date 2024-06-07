@@ -39,7 +39,7 @@ class DraftsController extends AppBaseController
      */
     public function create(Request $request)
     {
-        dd($request);
+        // dd($request);
         $serviceCats = Service_Category::all();
         $drafts_types = DB::table('draft_types')->select('*')->get();
 

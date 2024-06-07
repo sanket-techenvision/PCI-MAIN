@@ -19,7 +19,7 @@
             </button>
 
             <!-- Topbar Search Form -->
-           
+
         </div>
 
         <ul class="topbar-menu d-flex align-items-center gap-3">
@@ -32,13 +32,13 @@
                         <h5 class="my-0">
                             {{ auth()->user()->user_first_name }}
                         </h5>
-                        <h6 class="my-0 fw-normal">Admin</h6>
+                        <h6 class="my-0 fw-normal">Customer</h6>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
-                    
+
                     <!-- item-->
-                    <a href="{{ route('profile') }}" class="dropdown-item">
+                    <a href="{{ route('customer-profile') }}" class="dropdown-item">
                         <i class="ri-account-circle-line fs-18 align-middle me-1"></i>
                         <span>My Account</span>
                     </a>

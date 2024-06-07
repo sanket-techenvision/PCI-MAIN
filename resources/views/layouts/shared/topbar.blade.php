@@ -38,7 +38,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                     
                     <!-- item-->
-                    <a href="{{ route('second', ['pages', 'profile']) }}" class="dropdown-item">
+                    <a href="" class="dropdown-item">
                         <i class="ri-account-circle-line fs-18 align-middle me-1"></i>
                         <span>My Account</span>
                     </a>

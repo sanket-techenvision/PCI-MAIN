@@ -13,6 +13,6 @@ class CustomerMiddleware
         if (Auth::check() && Auth::user()->user_role == 2) {
             return $next($request);
         }
-        return redirect()->route('customer-welcome');
+        return redirect()->route('customer-dashboard');
     }
 }
