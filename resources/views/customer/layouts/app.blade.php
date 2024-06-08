@@ -7,6 +7,11 @@
     @include('layouts.shared/head-css')
     
     @vite(['resources/js/head.js'])
+    <style>
+        input:focus, select:focus, textarea:focus{
+            border: 1px solid grey !important;
+        }
+    </style>
 </head>
 
 <body>

@@ -4,7 +4,7 @@
     <!-- Brand Logo Light -->
     <a href="{{ route('customer-dashboard') }}" class="logo logo-light" style="background-color: #f9f9f9;">
         <span class="">
-            <img src="/images/pci/logo.png" alt="logo" class="img-fluid">
+            <img src="/images/pci/logo-lg.png" alt="logo" class="img-fluid">
         </span>
     </a>
 

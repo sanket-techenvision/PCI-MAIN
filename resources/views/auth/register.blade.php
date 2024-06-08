@@ -187,7 +187,7 @@
                         <!-- Logo-->
                         <div class="card-header py-4 text-center" style="background-color: #f9f9f9">
                             <a href="{{ route('register') }}">
-                                <span><img src="/images/pci/logo.png" alt="logo" height=""></span>
+                                <span><img src="/images/pci/logo-lg.png" alt="logo" height=""></span>
                             </a>
                         </div>
 
@@ -313,6 +313,7 @@
     <!-- end page -->
 
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/intlTelInput.min.js"></script>
+
     <script>
         const input = document.querySelector("#user_mobile");
         const iti = window.intlTelInput(input, {
@@ -332,6 +333,7 @@
             this.submit();
         });
     </script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -364,9 +366,14 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            $.each(data, function(key, value) {
-                                $('#user_city').append('<option value="' + value.id + '">' + value.name + '</option>');
-                            });
+                            if (data.length > 0) {
+                                $('#user_city').prop('required', true);
+                                $.each(data, function(key, value) {
+                                    $('#user_city').append('<option value="' + value.id + '">' + value.name + '</option>');
+                                });
+                            } else {
+                                $('#user_city').prop('required', false);
+                            }
                         }
                     });
                 }

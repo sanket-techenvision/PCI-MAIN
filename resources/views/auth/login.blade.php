@@ -184,7 +184,7 @@
                         <!-- Logo -->
                         <div class="card-header py-4 text-center" style="background-color: #f9f9f9">
                             <a href="{{ route('login') }}">
-                                <span><img src="/images/pci/logo.png" alt="logo" class="img-fluid" height=""></span>
+                                <span><img src="/images/pci/logo-lg.png" alt="logo" class="img-fluid" height=""></span>
                             </a>
                         </div>
 

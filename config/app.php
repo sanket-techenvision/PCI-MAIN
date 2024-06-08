@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Laracasts\Flash\FlashServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -230,6 +231,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Vite' => \Illuminate\Support\Facades\Vite::class,
         'Flash' => Laracasts\Flash\Flash::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
