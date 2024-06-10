@@ -29,8 +29,9 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_mobile' => 'required|string|min:10|max:10',
+            'user_mobile' => 'required|string|min:6|max:13',
             'password' => 'required|string',
+            'mobile_country_code' => 'required',
         ];
     }
 
@@ -41,11 +42,40 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+    // public function authenticate()
+    // {
+    //     $this->ensureIsNotRateLimited();
+
+    //     if (!Auth::attempt($this->only('user_mobile', 'password'), $this->filled('remember'))) {
+    //         RateLimiter::hit($this->throttleKey());
+
+    //         throw ValidationException::withMessages([
+    //             'user_mobile' => __('auth.failed'),
+    //         ]);
+    //     }
+
+    //     RateLimiter::clear($this->throttleKey());
+    // }
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
 
-        if (!Auth::attempt($this->only('user_mobile', 'password'), $this->filled('remember'))) {
+        $credentials = $this->only('user_mobile', 'password');
+        $mobileCountryCode = $this->input('mobile_country_code');
+
+        // Fetch user by mobile number
+        $user = \App\Models\User::where('user_mobile', $credentials['user_mobile'])->first();
+
+        if (!$user || $user->user_mobile_cc !== $mobileCountryCode) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'user_mobile' => __('auth.failed'),
+            ]);
+        }
+
+        if (!Auth::attempt($credentials, $this->filled('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

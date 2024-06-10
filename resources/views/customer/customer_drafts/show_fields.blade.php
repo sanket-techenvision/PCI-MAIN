@@ -1,89 +1,98 @@
-<!-- Applicant First Name Field -->
-<div class="col-sm-3">
-    {!! Form::label('applicant_first_name', 'Applicant First Name:') !!}
-    <p>{{ $customerDrafts->applicant_first_name }}</p>
-</div>
-
-<!-- Applicant Last Name Field -->
-<div class="col-sm-3">
-    {!! Form::label('applicant_last_name', 'Applicant Last Name:') !!}
-    <p>{{ $customerDrafts->applicant_last_name }}</p>
-</div>
-
-<!-- Applicant Email Field -->
-<div class="col-sm-3">
-    {!! Form::label('applicant_email', 'Applicant Email:') !!}
-    <p>{{ $customerDrafts->applicant_email }}</p>
-</div>
-
-<!-- Applicant Address Field -->
-<div class="col-sm-3">
-    {!! Form::label('applicant_address', 'Applicant Address:') !!}
-    <p>{{ $customerDrafts->applicant_address }}</p>
-</div>
-
-<!-- Service Cat Id Field -->
-<div class="col-sm-3">
-    {!! Form::label('service_cat_id', 'Service Cat Id:') !!}
+<!-- Service Information Section -->
+<h3>Service Information</h3>
+<div class="col-lg-3">
+    <label for="service_cat_id">Service Category:</label>
     <p>{{ $customerDrafts->service_cat_id }}</p>
 </div>
 
-<!-- Service Sub Cat Id Field -->
-<div class="col-sm-3">
-    {!! Form::label('service_sub_cat_id', 'Service Sub Cat Id:') !!}
+<div class="col-lg-3">
+    <label for="service_sub_cat_id">Service Sub Category:</label>
     <p>{{ $customerDrafts->service_sub_cat_id }}</p>
 </div>
 
-<!-- Service Subsub Cat Id Field -->
-<div class="col-sm-3">
-    {!! Form::label('service_subsub_cat_id', 'Service Subsub Cat Id:') !!}
+<div class="col-lg-3">
+    <label for="service_subsub_cat_id">Service Subsub Category:</label>
     <p>{{ $customerDrafts->service_subsub_cat_id }}</p>
 </div>
 
-<!-- Bank Id Field -->
-<div class="col-sm-3">
-    {!! Form::label('bank_id', 'Bank Id:') !!}
+<div class="col-lg-3">
+    <label for="bank_id">Issuing Bank:</label>
     <p>{{ $customerDrafts->bank_id }}</p>
 </div>
 
-<!-- Beneficiary First Name Field -->
-<div class="col-sm-3">
-    {!! Form::label('beneficiary_first_name', 'Beneficiary First Name:') !!}
+<!-- Applicant Information Section -->
+<h3>Applicant Information</h3>
+<div class="col-lg-3">
+    <label for="applicant_first_name">Applicant First Name:</label>
+    <p>{{ $customerDrafts->applicant_first_name }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="applicant_last_name">Applicant Last Name:</label>
+    <p>{{ $customerDrafts->applicant_last_name }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="applicant_email">Applicant Email:</label>
+    <p>{{ $customerDrafts->applicant_email }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="applicant_address">Applicant Address:</label>
+    <p>{{ $customerDrafts->applicant_address }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="applicant_country">Applicant Country:</label>
+    <p>{{ $customerDrafts->applicant_country }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="applicant_state">Applicant State:</label>
+    <p>{{ $customerDrafts->applicant_state }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="applicant_city">Applicant City:</label>
+    <p>{{ $customerDrafts->applicant_city }}</p>
+</div>
+
+<!-- Beneficiary Information Section -->
+<h3>Beneficiary Information</h3>
+<div class="col-lg-3">
+    <label for="beneficiary_first_name">Beneficiary First Name:</label>
     <p>{{ $customerDrafts->beneficiary_first_name }}</p>
 </div>
-
-<!-- Beneficiary Last Name Field -->
-<div class="col-sm-3">
-    {!! Form::label('beneficiary_last_name', 'Beneficiary Last Name:') !!}
+<div class="col-lg-3">
+    <label for="beneficiary_last_name">Beneficiary Last Name:</label>
     <p>{{ $customerDrafts->beneficiary_last_name }}</p>
 </div>
-
-<!-- Beneficiary Email Field -->
-<div class="col-sm-3">
-    {!! Form::label('beneficiary_email', 'Beneficiary Email:') !!}
+<div class="col-lg-3">
+    <label for="beneficiary_email">Beneficiary Email:</label>
     <p>{{ $customerDrafts->beneficiary_email }}</p>
 </div>
-
-<!-- Beneficiary Address Field -->
-<div class="col-sm-3">
-    {!! Form::label('beneficiary_address', 'Beneficiary Address:') !!}
+<div class="col-lg-3">
+    <label for="beneficiary_address">Beneficiary Address:</label>
     <p>{{ $customerDrafts->beneficiary_address }}</p>
 </div>
-
-<!-- Beneficiary Account No Field -->
-<div class="col-sm-3">
-    {!! Form::label('beneficiary_account_no', 'Beneficiary Account No:') !!}
+<div class="col-lg-3">
+    <label for="beneficiary_country">Beneficiary Country:</label>
+    <p>{{ $customerDrafts->beneficiary_country }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="beneficiary_state">Beneficiary State:</label>
+    <p>{{ $customerDrafts->beneficiary_state }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="beneficiary_city">Beneficiary City:</label>
+    <p>{{ $customerDrafts->beneficiary_city }}</p>
+</div>
+<div class="col-lg-3">
+    <label for="beneficiary_account_no">Beneficiary Account No:</label>
     <p>{{ $customerDrafts->beneficiary_account_no }}</p>
 </div>
-
-<!-- Guarantee Amount Field -->
-<div class="col-sm-3">
-    {!! Form::label('guarantee_amount', 'Guarantee Amount:') !!}
+<div class="col-lg-3">
+    <label for="guarantee_amount">Guarantee Amount:</label>
     <p>{{ $customerDrafts->guarantee_amount }}</p>
 </div>
 
-<!-- Payment Status Field -->
-<div class="col-sm-3">
-    {!! Form::label('payment_status', 'Payment Status:') !!}
+<!-- Payment Information Section -->
+<h3>Payment Information</h3>
+<div class="col-lg-3">
+    <label for="payment_status">Payment Status:</label>
     <p>{{ $customerDrafts->payment_status }}</p>
 </div>

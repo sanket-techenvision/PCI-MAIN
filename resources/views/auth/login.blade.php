@@ -5,6 +5,15 @@
     @include('layouts.shared/title-meta', ['title' => 'Log In'])
     @include('layouts.shared/head-css')
     @vite(['resources/js/head.js'])
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/css/intlTelInput.css">
+    <style>
+    .iti {
+        width: 100%;
+    }
+    .invalid-feedback{
+        display: block;
+    }
+</style>
 </head>
 
 <body class="authentication-bg position-relative">
@@ -195,18 +204,17 @@
                                 <p class="text-muted mb-4">Enter your Mobile Number and password to access your panel.</p>
                             </div>
 
-                            <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="{{ route('login') }}" id="login-form">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="mobile" class="form-label">Mobile No.</label>
-                                    <input class="form-control @error('user_mobile') is-invalid @enderror" type="number" id="mobile" required="" placeholder="Enter your mobile number" value="{{ old('user_mobile') }}" name="user_mobile">
+                                    <input class="form-control @error('user_mobile') is-invalid @enderror" type="tel" id="user_mobile" required="" placeholder="Enter your mobile number" value="{{ old('user_mobile') }}" name="user_mobile">
                                     @error('user_mobile')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="mb-3">
-                                    <a href="" class="text-muted float-end fs-12">Forgot your password?</a>
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password" value="" name="password" required>
@@ -217,7 +225,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
+                                    <a href="" class="text-muted float-end fs-12">Forgot your password?</a>
                                 </div>
 
                                 <div class="mb-3 mb-3">
@@ -226,7 +234,7 @@
                                         <label class="form-check-label" for="checkbox-signin">Remember me</label>
                                     </div>
                                 </div>
-
+                                <input type="hidden" id="mobile_country_code" name="mobile_country_code">
                                 <div class="mb-3 mb-0 text-center">
                                     <button class="btn btn-primary" type="submit"> Log In </button>
                                 </div>
@@ -261,6 +269,26 @@
     </footer>
     @vite(['resources/js/app.js'])
     @include('layouts.shared/footer-script')
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/intlTelInput.min.js"></script>
+    <script>
+        const input = document.querySelector("#user_mobile");
+        const iti = window.intlTelInput(input, {
+            separateDialCode: true,
+            initialCountry: "in",
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/utils.js",
+        });
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const countryData = iti.getSelectedCountryData();
+            const mobile_country_code = countryData.dialCode;
+            document.getElementById('mobile_country_code').value = mobile_country_code;
+            this.submit();
+        });
+    </script>
 </body>
 
 </html>

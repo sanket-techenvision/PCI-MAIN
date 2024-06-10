@@ -14,12 +14,9 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                $i = 1;
-                @endphp
                 @foreach($customerDrafts as $customerDrafts)
                 <tr>
-                    <td>{{$i}}</td>
+                    <td>{{$customerDrafts->srno}}</td>
                     <td>{{ $customerDrafts->service_category }}</td>
                     <td>{{ $customerDrafts->service_sub_category }}</td>
                     <td>{{ $customerDrafts->service_subsub_category }}</td>
@@ -38,9 +35,6 @@
                         </div>
                     </td>
                 </tr>
-                @php
-                $i ++;
-                @endphp
                 @endforeach
             </tbody>
         </table>

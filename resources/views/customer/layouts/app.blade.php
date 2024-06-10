@@ -8,7 +8,9 @@
     
     @vite(['resources/js/head.js'])
     <style>
-        input:focus, select:focus, textarea:focus{
+        input:focus,
+        select:focus,
+        textarea:focus {
             border: 1px solid grey !important;
         }
     </style>

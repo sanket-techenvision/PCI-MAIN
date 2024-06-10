@@ -19,65 +19,8 @@
         {!! Form::open(['route' => 'customer-drafts.store', 'id' => 'multi-step-form']) !!}
         <div class="card-body">
 
-            <!-- APPLICANT DETAILS -->
-            <div class="row step step-0" id="fields0">
-                <h3 for="APPLICANT DETAILS">APPLICANT DETAILS</h3>
-                <div class="row">
-                    <div class="col-4 mb-3">
-                        <label for="applicant_first_name" class="form-label">First Name<span class="text-danger">*</span></label>
-                        <input class="form-control @error('applicant_first_name') is-invalid @enderror" type="text" id="applicant_first_name" name="applicant_first_name" placeholder="{{ Auth::user()->user_first_name }}" required>
-                        @error('applicant_first_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label for="applicant_last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
-                        <input class="form-control @error('applicant_last_name') is-invalid @enderror" type="text" id="applicant_last_name" name="applicant_last_name" placeholder="{{ Auth::user()->user_last_name }}" value="{{ old('applicant_last_name') }}" required>
-                        @error('applicant_last_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label for="applicant_email" class="form-label">Applicant Email ID<span class="text-danger">*</span></label>
-                        <input class="form-control @error('applicant_email') is-invalid @enderror" type="email" id="applicant_email" name="applicant_email" placeholder="{{ Auth::user()->user_email }}" value="{{ old('applicant_email') }}" required>
-                        @error('applicant_email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label for="applicant_address" class="form-label">Address<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="applicant_address" name="applicant_address" placeholder="House No./ Building No./ Street / Locality" required></input>
-                    </div>
-                    <div class="col-4">
-                        <label for="applicant_country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <select class="form-control" id="applicant_country" name="applicant_country" required>
-                            <option value="">Select Country</option>
-                            @foreach($countries as $country)
-                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <label for="applicant_state" class="form-label">State<span class="text-danger">*</span></label>
-                        <select class="form-control" id="applicant_state" name="applicant_state" required>
-                            <option value="">Select State</option>
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <label for="applicant_city" class="form-label">City<span class="text-danger">*</span></label>
-                        <select class="form-control" id="applicant_city" name="applicant_city" required>
-                            <option value="">Select City</option>
-                        </select>
-                    </div>
-
-                </div>
-                <div>
-                    <button type="button" class="btn btn-primary next-button float-end" data-next="1">Next</button>
-                </div>
-            </div>
-
             <!-- Service Selection with Relative Bank -->
-            <div class="row step step-1" id="fields" style="display: none;">
+            <div class="row step step-0" id="fields0" >
                 <h3 for="SERVICE DETAILS">SERVICE DETAILS</h3>
 
                 <!-- Service Cat Id Field -->
@@ -114,7 +57,66 @@
                         <option value="">Select Issuer Bank</option>
                     </select>
                 </div>
+                <div>
+                    <button type="button" class="btn btn-primary next-button float-end" data-next="1">Next</button>
+                </div>
+            </div>
 
+             <!-- APPLICANT DETAILS -->
+             <div class="row step step-1" id="fields" style="display: none;">
+                <h3 for="APPLICANT DETAILS">APPLICANT DETAILS</h3>
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label for="applicant_first_name" class="form-label">First Name<span class="text-danger">*</span></label>
+                        <input class="form-control @error('applicant_first_name') is-invalid @enderror" type="text" id="applicant_first_name" name="applicant_first_name" value="{{ Auth::user()->user_first_name }}" placeholder="{{ Auth::user()->user_first_name }}" required>
+                        @error('applicant_first_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="applicant_last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
+                        <input class="form-control @error('applicant_last_name') is-invalid @enderror" type="text" id="applicant_last_name" name="applicant_last_name" value="{{ Auth::user()->user_last_name }}" placeholder="{{ Auth::user()->user_last_name }}" value="{{ old('applicant_last_name') }}" required>
+                        @error('applicant_last_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="applicant_email" class="form-label">Applicant Email ID<span class="text-danger">*</span></label>
+                        <input class="form-control @error('applicant_email') is-invalid @enderror" type="email" id="applicant_email" name="applicant_email" placeholder="{{ Auth::user()->user_email }}" value="{{ old('applicant_email') ? old('applicant_email')  : Auth::user()->user_email }}" required>
+                        @error('applicant_email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="applicant_address" class="form-label">Address<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="applicant_address" name="applicant_address" placeholder="House No./ Building No./ Street / Locality" required></input>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="applicant_country" class="form-label">Country<span class="text-danger">*</span></label>
+                        <select class="form-select" id="applicant_country" name="applicant_country" required>
+                            <option value="{{ Auth::user()->user_country }}" selected>{{ Auth::user()->user_country }}</option>
+                            <option value="">Select Country</option>
+                            @foreach($countries as $country)
+                            <option value="{{ $country->id }}" >{{ $country->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="applicant_state" class="form-label">State<span class="text-danger">*</span></label>
+                        <select class="form-control" id="applicant_state" name="applicant_state" required>
+                        <option value="{{ Auth::user()->user_state }}" selected>{{ Auth::user()->user_state }}</option>
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="applicant_city" class="form-label">City<span class="text-danger">*</span></label>
+                        <select class="form-control" id="applicant_city" name="applicant_city" required>
+                        <option value="{{ Auth::user()->user_city }}" selected>{{ Auth::user()->user_city }}</option>
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+
+                </div>
                 <div>
                     <button type="button" class="btn btn-primary next-button float-end" data-next="2">Next</button>
                     <button type="button" class="btn btn-secondary prev-button float-start" data-prev="0">Previous</button>
@@ -150,7 +152,7 @@
                         <label for="beneficiary_address" class="form-label">Address<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="beneficiary_address" name="beneficiary_address" placeholder="House No./ Building No./ Street / Locality" required></input>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 mb-3">
                         <label for="beneficiary_country" class="form-label">Country<span class="text-danger">*</span></label>
                         <select class="form-control" id="beneficiary_country" name="beneficiary_country" required>
                             <option value="">Select Country</option>
@@ -159,13 +161,13 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 mb-3">
                         <label for="beneficiary_state" class="form-label">State<span class="text-danger">*</span></label>
                         <select class="form-control" id="beneficiary_state" name="beneficiary_state" required>
                             <option value="">Select State</option>
                         </select>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 mb-3">
                         <label for="beneficiary_city" class="form-label">City<span class="text-danger">*</span></label>
                         <select class="form-control" id="beneficiary_city" name="beneficiary_city" required>
                             <option value="">Select City</option>
@@ -175,6 +177,13 @@
                         <label for="beneficiary_account_no" class="form-label">Beneficiary Account No.<span class="text-danger">*</span></label>
                         <input class="form-control @error('beneficiary_account_no') is-invalid @enderror" type="text" id="beneficiary_account_no" name="beneficiary_account_no" placeholder="Enter BENEFICIARY Account Number" value="{{ old('beneficiary_account_no') }}" required>
                         @error('beneficiary_account_no')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
+                        <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" required>
+                        @error('guarantee_amount')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -199,26 +208,13 @@
 
             <!-- Payment Step -->
             <div class="row step step-4" id="payment-gateway" style="display: none;">
-                <div>
-                    <h3>PAYMENT</h3>
-
-                    <div class="col-6 mb-3">
-                        <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
-                        <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" required>
-                        @error('guarantee_amount')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div id="payment-status" class="text-center">
-                        <button type="button" class="btn btn-primary" id="pay-button">Pay</button>
-                    </div>
+                <div class="m-5">
+                    <h3 class="text-center">PAYMENT</h3>
                     <input type="hidden" name="user_id" value="{{Auth::user()->user_id}}">
-
-                    <div id="payment-success" style="display: none;">
+                    <div id="payment-success">
                         <input type="hidden" name="payment_status" value="success">
-                        <button type="submit" class="btn btn-success">Payment Successfull !</button>
-                        <a href="{{route('customer-drafts.create')}}"> <button type="button" class="btn btn-danger">Payment Failed</button></a>
+                        <button type="submit" class="btn btn-success m-2">Payment Successfull !</button>
+                        <a href="{{route('customer-drafts.create')}}"> <button type="button" class="btn btn-danger m-2">Payment Failed</button></a>
                     </div>
                     <button type="button" class="btn btn-secondary prev-button float-start" data-prev="3">Previous</button>
                 </div>
@@ -437,6 +433,9 @@
                 var applicantLastName = $('#applicant_last_name').val();
                 var applicantEmail = $('#applicant_email').val();
                 var applicantAddress = $('#applicant_address').val();
+                var applicantCountry = $('#applicant_country option:selected').text();
+                var applicantState = $('#applicant_state option:selected').text();
+                var applicantCity = $('#applicant_city option:selected').text();
                 var serviceCategory = $('#Service_Category option:selected').text();
                 var serviceSubCategory = $('#service_sub_cat_id option:selected').text();
                 var serviceSubSubCategory = $('#service_subsub_cat_id option:selected').text();
@@ -445,18 +444,13 @@
                 var beneficiaryLastName = $('#beneficiary_last_name').val();
                 var beneficiaryEmail = $('#beneficiary_email').val();
                 var beneficiaryAddress = $('#beneficiary_address').val();
+                var beneficiaryCountry = $('#beneficiary_country option:selected').text();
+                var beneficiaryState = $('#beneficiary_state option:selected').text();
+                var beneficiaryCity = $('#beneficiary_city option:selected').text();
                 var beneficiaryAccountNo = $('#beneficiary_account_no').val();
-                console.log(applicantFirstName, applicantLastName, applicantEmail);
                 // Append data to preview content
                 previewContent.append(`
                 <div class="card shadow">
-                <h4>Applicant Details</h4>
-                <table class="table table-striped">
-                    <tr><th>First Name</th><td>${applicantFirstName}</td></tr>
-                    <tr><th>Last Name</th><td>${applicantLastName}</td></tr>
-                    <tr><th>Email</th><td>${applicantEmail}</td></tr>
-                    <tr><th>Address</th><td>${applicantAddress}</td></tr>
-                </table>
                 <h4>Service Details</h4>
                 <table class="table table-striped">
                     <tr><th>Service Category</th><td>${serviceCategory}</td></tr>
@@ -464,12 +458,25 @@
                     <tr><th>Service Subsub Category</th><td>${serviceSubSubCategory}</td></tr>
                     <tr><th>Issuer Bank</th><td>${bank}</td></tr>
                 </table>
+                <h4>Applicant Details</h4>
+                <table class="table table-striped">
+                    <tr><th>First Name</th><td>${applicantFirstName}</td></tr>
+                    <tr><th>Last Name</th><td>${applicantLastName}</td></tr>
+                    <tr><th>Email</th><td>${applicantEmail}</td></tr>
+                    <tr><th>Address</th><td>${applicantAddress}</td></tr>
+                    <tr><th>Country</th><td>${applicantCountry}</td></tr>
+                    <tr><th>State</th><td>${applicantState}</td></tr>
+                    <tr><th>City</th><td>${applicantCity}</td></tr>
+                </table>
                 <h4>Beneficiary Details</h4>
                 <table class="table table-striped">
                     <tr><th>First Name</th><td>${beneficiaryFirstName}</td></tr>
                     <tr><th>Last Name</th><td>${beneficiaryLastName}</td></tr>
                     <tr><th>Email</th><td>${beneficiaryEmail}</td></tr>
                     <tr><th>Address</th><td>${beneficiaryAddress}</td></tr>
+                    <tr><th>Country</th><td>${beneficiaryCountry}</td></tr>
+                    <tr><th>State</th><td>${beneficiaryState}</td></tr>
+                    <tr><th>City</th><td>${beneficiaryCity}</td></tr>
                     <tr><th>Account No</th><td>${beneficiaryAccountNo}</td></tr>
                 </table></div>
             `);

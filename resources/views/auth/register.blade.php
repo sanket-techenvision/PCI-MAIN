@@ -6,6 +6,11 @@
     @include('layouts.shared/head-css')
     @vite(['resources/js/head.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/css/intlTelInput.css">
+    <style>
+         .invalid-feedback{
+        display: block;
+    }
+    </style>
 </head>
 
 <body class="authentication-bg">
@@ -187,7 +192,7 @@
                         <!-- Logo-->
                         <div class="card-header py-4 text-center" style="background-color: #f9f9f9">
                             <a href="{{ route('register') }}">
-                                <span><img src="/images/pci/logo-lg.png" alt="logo" height=""></span>
+                                <span><img src="/images/pci/logo-lg.png" alt="logo" class="img-fluid" height=""></span>
                             </a>
                         </div>
 
@@ -243,7 +248,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="user_country" class="form-label">Country<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="user_country" name="user_country" required>
+                                    <select class="form-control" id="user_country" name="user_country" value=""  required>
                                         <option value="">Select Country</option>
                                         @foreach($countries as $country)
                                         <option value="{{ $country->id }}">{{ $country->name }}</option>
