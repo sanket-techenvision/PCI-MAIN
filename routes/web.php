@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Service_CategoryController;
@@ -32,15 +32,23 @@ use Illuminate\Support\Facades\Auth;
 //    return view('test');
 //});
 
-require __DIR__ . '/auth.php';
-
+//*****************=============================================************************//
+//**************************  Common Routes  **********************************************//
 Route::get('', function () {
     return view('customer');
 })->name('customer-welcome');
-
 Route::get('/get-states/{country_id}', [StateController::class, 'getStates']);
 Route::get('/get-cities/{state_id}', [CityController::class, 'getCities']);
 
+
+//*****************=============================================************************//
+//**************************  Auth Routes  **********************************************//
+
+require __DIR__ . '/auth.php';
+
+
+//*****************=============================================************************//
+//************************  Customer Routes  **********************************************//
 
 Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/customer-dashboard', [CustomerController::class, 'index'])->name('customer-dashboard');
@@ -53,13 +61,15 @@ Route::middleware(['auth', 'customer'])->group(function () {
 });
 
 
-Route::get('admin-login', function () {
-    return view('auth.login');
-})->name('admin-login');
+//****************************  Super Admin Routes  **********************************************//
+//*****************=============================================************************//
+Route::get('super-admin-login', function () {
+    return redirect()->route('login');
+})->name('super-admin-login');
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin-dashboard');
-    Route::get('/admin-profile', [AdminController::class, 'index'])->name('admin-profile');
+Route::middleware(['auth', 'superadmin'])->group(function () {
+    Route::get('/super-admin-dashboard', [SuperAdminController::class, 'index'])->name('super-admin-dashboard');
+    Route::get('/super-admin-profile', [SuperAdminController::class, 'index'])->name('super-admin-profile');
 
     Route::resource('serviceCategories', Service_CategoryController::class);
     Route::resource('service_sub_categories', Service_Sub_CategoryController::class);

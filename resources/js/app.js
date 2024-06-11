@@ -17,6 +17,9 @@ import bootstrap from 'bootstrap/dist/js/bootstrap.min';
 window.bootstrap = bootstrap;
 import 'simplebar';
 
+import Swal from 'sweetalert2';
+window.Swal = Swal;
+
 $(document).ready(() => {
     (function ($) {
 

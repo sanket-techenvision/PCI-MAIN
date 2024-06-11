@@ -41,14 +41,15 @@ class RegisteredUserController extends Controller
             'user_first_name' => 'required|string|max:255',
             'user_last_name' => 'required|string|max:255',
             'user_mobile' => 'required|string|min:10|max:10|unique:users,user_mobile',
-            'mobile_country_code'=>'required|string',
+            'mobile_country_code' => 'required|string',
             'user_email' => 'required|string|email|max:255|unique:users,user_email',
             'password' => 'required|string|confirmed|min:8|max:255',
             'user_country' => 'required|string|max:255',
             'user_state' => 'required|string|max:255',
             'user_city' => 'required|string|max:255',
+            'user_address' => 'required|string|max:255',
         ]);
-        
+
         $validatedData['user_country'] = Country::where('id', $validatedData['user_country'])->first()->name;
         $validatedData['user_state'] = State::where('id', $validatedData['user_state'])->first()->name;
         $validatedData['user_city'] = City::where('id', $validatedData['user_city'])->first()->name;
@@ -57,14 +58,15 @@ class RegisteredUserController extends Controller
             'user_first_name' => $validatedData['user_first_name'],
             'user_last_name' => $validatedData['user_last_name'],
             'user_mobile' => $validatedData['user_mobile'],
-            'user_mobile_cc'=>$validatedData['mobile_country_code'],
+            'user_mobile_cc' => $validatedData['mobile_country_code'],
             'user_email' => $validatedData['user_email'],
-            'password' => Hash::make(($validatedData['password'])), 
+            'password' => Hash::make(($validatedData['password'])),
             'user_city' => $validatedData['user_city'],
             'user_state' => $validatedData['user_state'],
             'user_country' => $validatedData['user_country'],
+            'user_address' => $validatedData['user_address'],
         ]);
-    
+
         event(new Registered($user));
 
         Auth::login($user);

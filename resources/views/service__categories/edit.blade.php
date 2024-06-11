@@ -15,8 +15,6 @@
 
     <div class="content px-3">
 
-        @include('adminlte-templates::common.errors')
-
         <div class="card">
 
             {!! Form::model($serviceCategory, ['route' => ['serviceCategories.update', $serviceCategory->service_cat_id], 'method' => 'patch']) !!}

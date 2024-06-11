@@ -7,9 +7,9 @@
     @vite(['resources/js/head.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/css/intlTelInput.css">
     <style>
-         .invalid-feedback{
-        display: block;
-    }
+        .invalid-feedback {
+            display: block;
+        }
     </style>
 </head>
 
@@ -247,8 +247,12 @@
                                     <input class="form-control" type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required>
                                 </div>
                                 <div class="col-md-6">
+                                    <label for="user_address" class="form-label">Address<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="user_address" name="user_address" placeholder="House No./ Building No./ Street / Locality" required></input>
+                                </div>
+                                <div class="col-md-6">
                                     <label for="user_country" class="form-label">Country<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="user_country" name="user_country" value=""  required>
+                                    <select class="form-control" id="user_country" name="user_country" value="" required>
                                         <option value="">Select Country</option>
                                         @foreach($countries as $country)
                                         <option value="{{ $country->id }}">{{ $country->name }}</option>

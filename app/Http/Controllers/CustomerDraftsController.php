@@ -43,8 +43,8 @@ class CustomerDraftsController extends AppBaseController
             $data['service_sub_category'] = Service_Sub_Category::where('service_sub_cat_id', $data['service_sub_cat_id'])->first()->service_sub_cat_name;
             $data['service_subsub_category'] = ServiceSubSubCategory::where('service_subsub_cat_id', $data['service_subsub_cat_id'])->first()->service_subsub_cat_name;
             $data['bank_name'] = Banks::where('bank_id', $data['bank_id'])->first()->bank_name;
-            $data['srno']= $srno;
-            $srno ++;
+            $data['srno'] = $srno;
+            $srno++;
         }
         // dd($customerDrafts);
 
@@ -82,7 +82,9 @@ class CustomerDraftsController extends AppBaseController
 
         // dd($input);
         $input['letter_type'] = '';
-        if ($input['service_cat_id'] == 2) {
+        if ($input['service_cat_id'] == 1) {
+            $input['letter_type'] = 'RWA - BCL';
+        } elseif ($input['service_cat_id'] == 2) {
             $input['letter_type'] = 'LETTER OF CREDIT';
         } elseif ($input['service_cat_id'] == 3) {
             $input['letter_type'] = 'BANK GUARANTEE';
@@ -129,7 +131,7 @@ class CustomerDraftsController extends AppBaseController
         // Save the PDF to the storage or serve it for download
         $pdf->save(storage_path('app/public/' . $filename));
 
-        Flash::success('Customer Drafts saved successfully.');
+        session()->flash('success', 'Your request has been submitted successfully. Please await admin approval. You will receive a notification via email or SMS once approved. Feel free to logout for now.');
 
         return redirect(route('customer-drafts.index'));
     }
@@ -142,15 +144,14 @@ class CustomerDraftsController extends AppBaseController
         $customerDrafts = $this->customerDraftsRepository->find($id);
 
         if (empty($customerDrafts)) {
-            Flash::error('Drafts not found');
-
-            return redirect(route('drafts.index'));
+            // Flash::error('Drafts not found');
+            session()->flash('error', 'Drafts not found');
+            return redirect(route('customer-drafts.index'));
         }
         $customerDrafts['service_cat_id'] = Service_Category::where('service_cat_id', $customerDrafts['service_cat_id'])->first()->service_cat_name;
         $customerDrafts['service_sub_cat_id'] = Service_Sub_Category::where('service_sub_cat_id', $customerDrafts['service_sub_cat_id'])->first()->service_sub_cat_name;
         $customerDrafts['service_subsub_cat_id'] = ServiceSubSubCategory::where('service_subsub_cat_id', $customerDrafts['service_subsub_cat_id'])->first()->service_subsub_cat_name;
         $customerDrafts['bank_id'] = Banks::where('bank_id', $customerDrafts['bank_id'])->first()->bank_name;
-
         // dd($customerDrafts);
         return view('customer.customer_drafts.show')->with('customerDrafts', $customerDrafts);
     }

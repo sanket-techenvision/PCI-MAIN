@@ -27,6 +27,7 @@ class User extends Authenticatable
         'user_city',
         'user_state',
         'user_country',
+        'user_address',
     ];
 
     /**
@@ -47,4 +48,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getDashboardRoute()
+    {
+        if ($this->user_role == 1) {
+            return route('super-admin-dashboard');
+        } elseif ($this->user_role == 2) {
+            return route('customer-dashboard');
+        }
+
+        // Default route (change as needed)
+        return route('default-dashboard');
+    }
 }

@@ -15,8 +15,6 @@
 
     <div class="content px-3">
 
-        @include('adminlte-templates::common.errors')
-
         <div class="card">
 
             {!! Form::model($drafts, ['route' => ['drafts.update', $drafts->id], 'method' => 'patch']) !!}

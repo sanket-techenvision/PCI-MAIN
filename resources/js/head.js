@@ -11,6 +11,9 @@ window.jQuery = $;
 import moment from 'moment';
 window.moment = moment;
 
+import Swal from 'sweetalert2';
+window.Swal = Swal;
+
 
 (function () {
     var savedConfig = sessionStorage.getItem("__ATTEX_CONFIG__");

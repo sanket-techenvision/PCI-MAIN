@@ -59,7 +59,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="javascript:history.back()">
+                                <a class="dropdown-item" href="{{ Auth::user()->getDashboardRoute() }}">
                                     Dashboard
                                 </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

@@ -1,5 +1,8 @@
 @extends('customer.layouts.app')
 
+@section('css')
+@vite('node_modules/select2/dist/css/select2.min.css')
+@endsection
 @section('content')
 <section class="content-header p-3">
     <div class="container-fluid">
@@ -20,13 +23,13 @@
         <div class="card-body">
 
             <!-- Service Selection with Relative Bank -->
-            <div class="row step step-0" id="fields0" >
+            <div class="row step step-0" id="fields0">
                 <h3 for="SERVICE DETAILS">SERVICE DETAILS</h3>
 
                 <!-- Service Cat Id Field -->
                 <div class="form-group col-sm-6 mb-2">
                     <label for="Service_Category">Service Category<span class="text-danger">*</span></label>
-                    <select id="Service_Category" class="form-control" name="service_cat_id" required>
+                    <select id="Service_Category" class="form-control select2" data-toggle="select2" name="service_cat_id" required>
                         <option value="">Select Category</option>
                         @foreach($serviceCats as $data)
                         <option value="{{ $data->service_cat_id }}">{{ $data->service_cat_name }}</option>
@@ -37,7 +40,7 @@
                 <!-- Service Sub Cat Id Field -->
                 <div class="form-group col-sm-6 mb-2">
                     <label for="service_sub_cat_id">Service Sub Category<span class="text-danger">*</span></label>
-                    <select id="service_sub_cat_id" class="form-control" name="service_sub_cat_id" required>
+                    <select id="service_sub_cat_id" class="form-control select2" data-toggle="select2" name="service_sub_cat_id" required>
                         <option value="">Select Sub Category</option>
                     </select>
                 </div>
@@ -45,7 +48,7 @@
                 <!-- Service Subsub Cat Id Field -->
                 <div class="form-group col-sm-6 mb-2" id="subsub-category-field" style="display: none;">
                     <label for="service_subsub_cat_id">Service Subsub Category<span class="text-danger">*</span></label>
-                    <select id="service_subsub_cat_id" class="form-control" name="service_subsub_cat_id" required>
+                    <select id="service_subsub_cat_id" class="form-control select2" data-toggle="select2" name="service_subsub_cat_id" required>
                         <option value="">Select Subsub Category</option>
                     </select>
                 </div>
@@ -53,7 +56,7 @@
                 <!-- Bank Id Field -->
                 <div class="form-group col-sm-6 mb-2">
                     <label for="bank_id">Select Issuer Bank<span class="text-danger">*</span></label>
-                    <select id="bank_id" class="form-control" name="bank_id" required>
+                    <select id="bank_id" class="form-control select2" data-toggle="select2" name="bank_id" required>
                         <option value="">Select Issuer Bank</option>
                     </select>
                 </div>
@@ -62,8 +65,8 @@
                 </div>
             </div>
 
-             <!-- APPLICANT DETAILS -->
-             <div class="row step step-1" id="fields" style="display: none;">
+            <!-- APPLICANT DETAILS -->
+            <div class="row step step-1" id="fields" style="display: none;">
                 <h3 for="APPLICANT DETAILS">APPLICANT DETAILS</h3>
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3">
@@ -93,25 +96,24 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="applicant_country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <select class="form-select" id="applicant_country" name="applicant_country" required>
-                            <option value="{{ Auth::user()->user_country }}" selected>{{ Auth::user()->user_country }}</option>
+                        <select class="form-control select2" data-toggle="select2" id="applicant_country" name="applicant_country" required>
                             <option value="">Select Country</option>
                             @foreach($countries as $country)
-                            <option value="{{ $country->id }}" >{{ $country->name }}</option>
+                            <option value="{{ $country->id }}" @if($country->name == Auth::user()->user_country) selected @endif>
+                                {{ $country->name}}
+                            </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="applicant_state" class="form-label">State<span class="text-danger">*</span></label>
-                        <select class="form-control" id="applicant_state" name="applicant_state" required>
-                        <option value="{{ Auth::user()->user_state }}" selected>{{ Auth::user()->user_state }}</option>
+                        <select class="form-control select2" data-toggle="select2" id="applicant_state" name="applicant_state" required>
                             <option value="">Select State</option>
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="applicant_city" class="form-label">City<span class="text-danger">*</span></label>
-                        <select class="form-control" id="applicant_city" name="applicant_city" required>
-                        <option value="{{ Auth::user()->user_city }}" selected>{{ Auth::user()->user_city }}</option>
+                        <select class="form-control select2" data-toggle="select2" id="applicant_city" name="applicant_city" required>
                             <option value="">Select City</option>
                         </select>
                     </div>
@@ -154,7 +156,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="beneficiary_country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <select class="form-control" id="beneficiary_country" name="beneficiary_country" required>
+                        <select class="form-control select2" data-toggle="select2" id="beneficiary_country" name="beneficiary_country" required>
                             <option value="">Select Country</option>
                             @foreach($countries as $country)
                             <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -163,13 +165,13 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="beneficiary_state" class="form-label">State<span class="text-danger">*</span></label>
-                        <select class="form-control" id="beneficiary_state" name="beneficiary_state" required>
+                        <select class="form-control select2" data-toggle="select2" id="beneficiary_state" name="beneficiary_state" required>
                             <option value="">Select State</option>
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="beneficiary_city" class="form-label">City<span class="text-danger">*</span></label>
-                        <select class="form-control" id="beneficiary_city" name="beneficiary_city" required>
+                        <select class="form-control select2" data-toggle="select2" id="beneficiary_city" name="beneficiary_city" required>
                             <option value="">Select City</option>
                         </select>
                     </div>

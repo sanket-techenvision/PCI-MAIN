@@ -32,7 +32,7 @@
                         <h5 class="my-0">
                             {{ auth()->user()->user_first_name }}
                         </h5>
-                        <h6 class="my-0 fw-normal">Admin</h6>
+                        <h6 class="my-0 fw-normal">Super Admin</h6>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
