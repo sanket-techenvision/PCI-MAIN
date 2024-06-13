@@ -22,10 +22,10 @@
                     <td>{{ $customerDrafts->service_subsub_category }}</td>
                     <td>{{ $customerDrafts->bank_name }}</td>
                     <td style="color:green">{{ $customerDrafts->payment_status }}</td>
-                    <td style="color:red">Not Approved Yet</td>
+                    <td><button type="button" class="btn" style="background-color: #ffc107 !important; color: #fff;">Pending</button></td>
                     <td style="width: 120px">
                         <div class='btn-group'>
-                            <a href="{{ route('customer-drafts.show', [$customerDrafts->id]) }}" class='btn btn-default btn-xs'>
+                            <a href="{{ route('customer-drafts.show', [$customerDrafts->id]) }}" class="btn"  style="background-color: #3e60d5; color: #fff;">
                                 <i class="ri-eye-line"></i>View
                             </a>
                             <!-- <a href="{{ route('customer-drafts.edit', [$customerDrafts->id]) }}"

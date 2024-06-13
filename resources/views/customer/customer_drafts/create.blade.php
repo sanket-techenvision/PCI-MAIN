@@ -92,7 +92,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="applicant_address" class="form-label">Address<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="applicant_address" name="applicant_address" placeholder="House No./ Building No./ Street / Locality" required></input>
+                        <input type="text" class="form-control" id="applicant_address" name="applicant_address" placeholder="House No./ Building No./ Street / Locality" value="{{old('applicant_address') ? old('applicant_address') : Auth::user()->user_address}}" required></input>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="applicant_country" class="form-label">Country<span class="text-danger">*</span></label>
@@ -117,16 +117,7 @@
                             <option value="">Select City</option>
                         </select>
                     </div>
-
                 </div>
-                <div>
-                    <button type="button" class="btn btn-primary next-button float-end" data-next="2">Next</button>
-                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="0">Previous</button>
-                </div>
-            </div>
-
-            <!-- BENEFICIARY DETAILS -->
-            <div class="row step step-2" id="fields2" style="display: none;">
                 <h3 for="BENEFICIARY DETAILS">BENEFICIARY DETAILS</h3>
                 <div class="row">
                     <div class="col-6 mb-3">
@@ -152,7 +143,7 @@
                     </div>
                     <div class="col-4 mb-3">
                         <label for="beneficiary_address" class="form-label">Address<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="beneficiary_address" name="beneficiary_address" placeholder="House No./ Building No./ Street / Locality" required></input>
+                        <input type="text" class="form-control  @error('beneficiary_address') is-invalid @enderror" id="beneficiary_address" name="beneficiary_address" placeholder="House No./ Building No./ Street / Locality" required></input>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="beneficiary_country" class="form-label">Country<span class="text-danger">*</span></label>
@@ -184,32 +175,32 @@
                     </div>
                     <div class="col-6 mb-3">
                         <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
-                        <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" required>
+                        <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" min="1" required>
                         @error('guarantee_amount')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary next-button float-end" data-next="3">Next</button>
-                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="1">Previous</button>
+                    <button type="button" class="btn btn-primary next-button float-end" data-next="2">Next</button>
+                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="0">Previous</button>
                 </div>
             </div>
 
             <!-- Preview Filled Data -->
-            <div class="row step step-3" id="preview" style="display: none;">
+            <div class="row step step-2" id="preview" style="display: none;">
                 <h3 for="PREVIEW FILLED DATA">PREVIEW FILLED DATA</h3>
                 <div id="preview-content">
                     <!-- Content will be populated by JavaScript -->
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary next-button float-end" data-next="4">Confirm and Proceed To Payment</button>
-                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="2">Previous</button>
+                    <button type="button" class="btn btn-primary next-button float-end" data-next="3">Confirm and Proceed To Payment</button>
+                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="1">Previous</button>
                 </div>
             </div>
 
             <!-- Payment Step -->
-            <div class="row step step-4" id="payment-gateway" style="display: none;">
+            <div class="row step step-3" id="payment-gateway" style="display: none;">
                 <div class="m-5">
                     <h3 class="text-center">PAYMENT</h3>
                     <input type="hidden" name="user_id" value="{{Auth::user()->user_id}}">
@@ -218,7 +209,7 @@
                         <button type="submit" class="btn btn-success m-2">Payment Successfull !</button>
                         <a href="{{route('customer-drafts.create')}}"> <button type="button" class="btn btn-danger m-2">Payment Failed</button></a>
                     </div>
-                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="3">Previous</button>
+                    <button type="button" class="btn btn-secondary prev-button float-start" data-prev="2">Previous</button>
                 </div>
             </div>
         </div>
@@ -231,10 +222,10 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Countre/State/City -->
+    <!-- Country/State/City -->
     <script>
         $(document).ready(function() {
-            function handleLocationChange(countrySelector, stateSelector, citySelector) {
+            function handleLocationChange(countrySelector, stateSelector, citySelector, userState, userCity) {
                 $(countrySelector).change(function() {
                     var countryId = $(this).val();
                     $(stateSelector).html('<option value="">Select State</option>');
@@ -249,6 +240,10 @@
                                 $.each(data, function(key, value) {
                                     $(stateSelector).append('<option value="' + value.id + '">' + value.name + '</option>');
                                 });
+                                // Set the user's state if it's available
+                                if (userState) {
+                                    $(stateSelector).val(userState).trigger('change');
+                                }
                             }
                         });
                     }
@@ -269,6 +264,10 @@
                                     $.each(data, function(key, value) {
                                         $(citySelector).append('<option value="' + value.id + '">' + value.name + '</option>');
                                     });
+                                    // Set the user's city if it's available
+                                    if (userCity) {
+                                        $(citySelector).val(userCity);
+                                    }
                                 } else {
                                     $(citySelector).prop('required', false);
                                 }
@@ -276,13 +275,21 @@
                         });
                     }
                 });
+
+                // Trigger change on country to load states and cities on page load
+                if ($(countrySelector).val()) {
+                    $(countrySelector).trigger('change');
+                }
             }
+            // Get user's state and city from server-side rendering
+            var userState = "{{$userdata['stateid'] }}";
+            var userCity = "{{ $userdata['cityid'] }}";
 
             // Call the function for applicant fields
-            handleLocationChange('#applicant_country', '#applicant_state', '#applicant_city');
+            handleLocationChange('#applicant_country', '#applicant_state', '#applicant_city', userState, userCity);
 
             // Call the function for beneficiary fields
-            handleLocationChange('#beneficiary_country', '#beneficiary_state', '#beneficiary_city');
+            handleLocationChange('#beneficiary_country', '#beneficiary_state', '#beneficiary_city', '', '');
         });
     </script>
 
@@ -373,7 +380,7 @@
                 // Validate the current step
                 var isValid = validateStep(currentStep);
                 if (isValid) {
-                    if (nextStep === 3) {
+                    if (nextStep === 2) {
                         populatePreview();
                     }
                     // Hide current step and show the next step

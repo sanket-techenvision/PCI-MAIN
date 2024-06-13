@@ -37,6 +37,9 @@ use Illuminate\Support\Facades\Auth;
 Route::get('', function () {
     return view('customer');
 })->name('customer-welcome');
+Route::get('aboutus', function () {
+    return view('aboutus');
+})->name('/');
 Route::get('/get-states/{country_id}', [StateController::class, 'getStates']);
 Route::get('/get-cities/{state_id}', [CityController::class, 'getCities']);
 
@@ -58,6 +61,7 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/get-sub-categories/{categoryId}', [Service_Sub_CategoryController::class, 'getSubCategories']);
     Route::get('/get-subsub-categories/{subCategoryId}', [ServiceSubSubCategoryController::class, 'getSubSubCategories']);
     Route::get('/get-bank-data/{subCategoryId}', [BanksController::class, 'getBanksData']);
+    Route::post('/get-dynamic-form', [CustomerDraftsController::class, 'getDynamicForm']);
 });
 
 
