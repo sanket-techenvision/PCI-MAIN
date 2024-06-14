@@ -231,6 +231,7 @@
                         $('#dynamic-form-content').html(response);
                         $('#fields').show();
                         $('#fields0').hide();
+                        $('.select2').select2();
                     },
                     error: function(xhr, status, error) {
                         console.error('Error fetching dynamic form:', error);

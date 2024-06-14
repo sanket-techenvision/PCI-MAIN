@@ -3,37 +3,47 @@
 <div class="row mb-3">
     <div class="col-md-6 mb-3">
         <label for="applicant_first_name" class="form-label">First Name<span class="text-danger">*</span></label>
-        <input class="form-control @error('applicant_first_name') is-invalid @enderror" type="text" id="applicant_first_name" name="applicant_first_name" value="{{ Auth::user()->user_first_name }}" placeholder="{{ Auth::user()->user_first_name }}" required>
+        <input class="form-control @error('applicant_first_name') is-invalid @enderror" type="text"
+            id="applicant_first_name" name="applicant_first_name" value="{{ Auth::user()->user_first_name }}"
+            placeholder="{{ Auth::user()->user_first_name }}" required>
         @error('applicant_first_name')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
         <label for="applicant_last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
-        <input class="form-control @error('applicant_last_name') is-invalid @enderror" type="text" id="applicant_last_name" name="applicant_last_name" value="{{ Auth::user()->user_last_name }}" placeholder="{{ Auth::user()->user_last_name }}" value="{{ old('applicant_last_name') }}" required>
+        <input class="form-control @error('applicant_last_name') is-invalid @enderror" type="text"
+            id="applicant_last_name" name="applicant_last_name" value="{{ Auth::user()->user_last_name }}"
+            placeholder="{{ Auth::user()->user_last_name }}" value="{{ old('applicant_last_name') }}" required>
         @error('applicant_last_name')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
         <label for="applicant_email" class="form-label">Applicant Email ID<span class="text-danger">*</span></label>
-        <input class="form-control @error('applicant_email') is-invalid @enderror" type="email" id="applicant_email" name="applicant_email" placeholder="{{ Auth::user()->user_email }}" value="{{ old('applicant_email') ? old('applicant_email')  : Auth::user()->user_email }}" required>
+        <input class="form-control @error('applicant_email') is-invalid @enderror" type="email" id="applicant_email"
+            name="applicant_email" placeholder="{{ Auth::user()->user_email }}"
+            value="{{ old('applicant_email') ? old('applicant_email') : Auth::user()->user_email }}" required>
         @error('applicant_email')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
         <label for="applicant_address" class="form-label">Address<span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="applicant_address" name="applicant_address" placeholder="House No./ Building No./ Street / Locality" value="{{old('applicant_address') ? old('applicant_address') : Auth::user()->user_address}}" required></input>
+        <input type="text" class="form-control" id="applicant_address" name="applicant_address"
+            placeholder="House No./ Building No./ Street / Locality"
+            value="{{ old('applicant_address') ? old('applicant_address') : Auth::user()->user_address }}"
+            required></input>
     </div>
     <div class="col-md-4 mb-3">
         <label for="applicant_country" class="form-label">Country<span class="text-danger">*</span></label>
-        <select class="form-control select2" data-toggle="select2" id="applicant_country" name="applicant_country" required>
+        <select class="form-control select2" data-toggle="select2" id="applicant_country" name="applicant_country"
+            required>
             <option value="">Select Country</option>
-            @foreach($countries as $country)
-            <option value="{{ $country->id }}" @if($country->name == Auth::user()->user_country) selected @endif>
-                {{ $country->name}}
-            </option>
+            @foreach ($countries as $country)
+                <option value="{{ $country->id }}" @if ($country->name == Auth::user()->user_country) selected @endif>
+                    {{ $country->name }}
+                </option>
             @endforeach
         </select>
     </div>
@@ -55,62 +65,129 @@
 <div class="row">
     <div class="col-6 mb-3">
         <label for="beneficiary_first_name" class="form-label">First Name<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_first_name') is-invalid @enderror" type="text" id="beneficiary_first_name" name="beneficiary_first_name" placeholder="Enter BENEFICIARY first name" value="{{ old('beneficiary_first_name') }}" required>
+        <input class="form-control @error('beneficiary_first_name') is-invalid @enderror" type="text"
+            id="beneficiary_first_name" name="beneficiary_first_name" placeholder="Enter BENEFICIARY first name"
+            value="{{ old('beneficiary_first_name') }}" required>
         @error('beneficiary_first_name')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-6 mb-3">
         <label for="beneficiary_last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_last_name') is-invalid @enderror" type="text" id="beneficiary_last_name" name="beneficiary_last_name" placeholder="Enter BENEFICIARY last name" value="{{ old('beneficiary_last_name') }}" required>
+        <input class="form-control @error('beneficiary_last_name') is-invalid @enderror" type="text"
+            id="beneficiary_last_name" name="beneficiary_last_name" placeholder="Enter BENEFICIARY last name"
+            value="{{ old('beneficiary_last_name') }}" required>
         @error('beneficiary_last_name')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-6 mb-3">
-        <label for="beneficiary_email" class="form-label">Beneficiary Email ID<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_email') is-invalid @enderror" type="email" id="beneficiary_email" name="beneficiary_email" placeholder="Enter BENEFICIARY Mail ID" value="{{ old('beneficiary_email') }}" required>
+        <label for="beneficiary_email" class="form-label">Beneficiary Email ID<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_email') is-invalid @enderror" type="email"
+            id="beneficiary_email" name="beneficiary_email" placeholder="Enter BENEFICIARY Mail ID"
+            value="{{ old('beneficiary_email') }}" required>
         @error('beneficiary_email')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-4 mb-3">
         <label for="beneficiary_address" class="form-label">Address<span class="text-danger">*</span></label>
-        <input type="text" class="form-control  @error('beneficiary_address') is-invalid @enderror" id="beneficiary_address" name="beneficiary_address" placeholder="House No./ Building No./ Street / Locality" required></input>
+        <input type="text" class="form-control  @error('beneficiary_address') is-invalid @enderror"
+            id="beneficiary_address" name="beneficiary_address"
+            placeholder="House No./ Building No./ Street / Locality" required></input>
     </div>
     <div class="col-md-4 mb-3">
         <label for="beneficiary_country" class="form-label">Country<span class="text-danger">*</span></label>
-        <select class="form-control select2" data-toggle="select2" id="beneficiary_country" name="beneficiary_country" required>
+        <select class="form-control select2" data-toggle="select2" id="beneficiary_country"
+            name="beneficiary_country" required>
             <option value="">Select Country</option>
-            @foreach($countries as $country)
-            <option value="{{ $country->id }}">{{ $country->name }}</option>
+            @foreach ($countries as $country)
+                <option value="{{ $country->id }}">{{ $country->name }}</option>
             @endforeach
         </select>
     </div>
     <div class="col-md-4 mb-3">
         <label for="beneficiary_state" class="form-label">State<span class="text-danger">*</span></label>
-        <select class="form-control select2" data-toggle="select2" id="beneficiary_state" name="beneficiary_state" required>
+        <select class="form-control select2" data-toggle="select2" id="beneficiary_state" name="beneficiary_state"
+            required>
             <option value="">Select State</option>
         </select>
     </div>
     <div class="col-md-4 mb-3">
         <label for="beneficiary_city" class="form-label">City<span class="text-danger">*</span></label>
-        <select class="form-control select2" data-toggle="select2" id="beneficiary_city" name="beneficiary_city" required>
+        <select class="form-control select2" data-toggle="select2" id="beneficiary_city" name="beneficiary_city"
+            required>
             <option value="">Select City</option>
         </select>
     </div>
-    <div class="col-6 mb-3">
-        <label for="beneficiary_account_no" class="form-label">Beneficiary Account No.<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_account_no') is-invalid @enderror" type="text" id="beneficiary_account_no" name="beneficiary_account_no" placeholder="Enter BENEFICIARY Account Number" value="{{ old('beneficiary_account_no') }}" required>
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_account_no" class="form-label">Beneficiary Account No.<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_account_no') is-invalid @enderror" type="text"
+            id="beneficiary_account_no" name="beneficiary_account_no" placeholder="Enter BENEFICIARY Account Number"
+            value="{{ old('beneficiary_account_no') }}" required>
         @error('beneficiary_account_no')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-6 mb-3">
+    <div class="col-md-6 mb-3">
         <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
-        <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" min="1" required>
+        <div class="form-group">
+            <select class="form-select select2 @error('currency_code') is-invalid @enderror" data-toggle="select2"
+                id="currency_code" name="currency_code" required>
+                <option value="" disabled selected>Select Currency</option>
+                @foreach ($currency as $currency)
+                    <option value="{{ $currency->code }}"
+                        {{ old('currency_code') == $currency->code ? 'selected' : '' }}>{{ $currency->code }} -
+                        {{ $currency->country }}</option>
+                @endforeach
+            </select>
+            <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number"
+                id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount"
+                value="{{ old('guarantee_amount') }}" min="1" required>
+        </div>
         @error('guarantee_amount')
-        <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        @error('currency_code')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+</div>
+
+<h3 for="ADVISING BANK">ADVISING BANK</h3>
+<div class="row">
+    {{-- ADVISING BANK --}}
+    <div class="col-md-6 mb-3">
+        <label for="advising_swift_code" class="form-label">Advising Bank SWIFT Code<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('advising_swift_code') is-invalid @enderror" type="text"
+            id="advising_swift_code" name="advising_swift_code" placeholder="Enter Advising Bank SWIFT Code"
+            value="{{ old('advising_swift_code') }}" required>
+        @error('advising_swift_code')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_bank_name" class="form-label">Beneficiary Bank Name<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_bank_name') is-invalid @enderror" type="text"
+            id="beneficiary_bank_name" name="beneficiary_bank_name" placeholder="Enter Beneficiary Bank Name"
+            value="{{ old('beneficiary_bank_name') }}" required>
+        @error('beneficiary_bank_name')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_bank_address" class="form-label">Beneficiary Bank Address<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_bank_address') is-invalid @enderror" type="text"
+            id="beneficiary_bank_address" name="beneficiary_bank_address"
+            placeholder="Enter Beneficiary Bank Address" value="{{ old('beneficiary_bank_address') }}" required>
+        @error('beneficiary_bank_address')
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 </div>
@@ -131,7 +208,8 @@
                         dataType: 'json',
                         success: function(data) {
                             $.each(data, function(key, value) {
-                                $(stateSelector).append('<option value="' + value.id + '">' + value.name + '</option>');
+                                $(stateSelector).append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
                             });
                             // Set the user's state if it's available
                             if (userState) {
@@ -155,7 +233,8 @@
                             if (data.length > 0) {
                                 $(citySelector).prop('required', true);
                                 $.each(data, function(key, value) {
-                                    $(citySelector).append('<option value="' + value.id + '">' + value.name + '</option>');
+                                    $(citySelector).append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
                                 });
                                 // Set the user's city if it's available
                                 if (userCity) {
@@ -175,7 +254,7 @@
             }
         }
         // Get user's state and city from server-side rendering
-        var userState = "{{$userdata['stateid'] }}";
+        var userState = "{{ $userdata['stateid'] }}";
         var userCity = "{{ $userdata['cityid'] }}";
 
         // Call the function for applicant fields

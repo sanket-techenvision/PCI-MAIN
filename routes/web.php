@@ -37,9 +37,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('', function () {
     return view('customer');
 })->name('customer-welcome');
-Route::get('aboutus', function () {
-    return view('aboutus');
-})->name('/');
+
 Route::get('/get-states/{country_id}', [StateController::class, 'getStates']);
 Route::get('/get-cities/{state_id}', [CityController::class, 'getCities']);
 

@@ -11,7 +11,7 @@
         input:focus,
         select:focus,
         textarea:focus {
-            border: 1px solid black !important;
+            border: 1px solid #3e60d5 !important;
         }
         input,
         select,

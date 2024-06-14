@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\CustomerDrafts;
 use App\Models\State;
 use Illuminate\Support\Facades\Auth;
@@ -101,42 +102,54 @@ class CustomerDraftsController extends AppBaseController
             $input['letter_type'] = '(Type of Letter)';
         }
         // dd($input['letter_type']);
+        $currentDate = Carbon::now()->format('Y-m-d_H-i-s');
+        $startOfDay = Carbon::now()->startOfDay();
+        $endOfDay = Carbon::now()->endOfDay();
+        $ref_1 = $input['applicant_country'];
+        $ref_2 = Service_Category::where('service_cat_id', $input['service_cat_id'])->first()->service_cat_name;
+        $ref_3 = Carbon::now()->format('d');
+        $ref_4 = CustomerDrafts::whereBetween('created_at', [$startOfDay, $endOfDay])->count();
+        $ref_5 = Carbon::now()->format('m-d');
+        $ref_6 = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
+
+        $reference_name = $ref_1 . '/' . $ref_2 . '/' . $ref_3 . '-' . $ref_4 .'/'. $ref_5 .'.'. $ref_6;
+        $reference_name = 'REF : ' . $reference_name;
+        dd($reference_name);
         $customerDrafts = $this->customerDraftsRepository->create($input);
-        // $pdf = PDF::loadView('customer.customer_drafts.customer_draft_pdf', [
-        //     'applicant_first_name' => $input['applicant_first_name'],
-        //     'applicant_last_name' => $input['applicant_last_name'],
-        //     'applicant_email' => $input['applicant_email'],
 
-        //     'applicant_address' => $input['applicant_address'],
-        //     'applicant_country' => $input['applicant_country'],
-        //     'applicant_state' => $input['applicant_state'],
-        //     'applicant_city' => $input['applicant_city'],
+        $pdf = PDF::loadView('customer.customer_drafts.customer_draft_pdf_rwa', [
+            'applicant_first_name' => $input['applicant_first_name'],
+            'applicant_last_name' => $input['applicant_last_name'],
+            'applicant_email' => $input['applicant_email'],
 
-        //     'service_category' => $input['service_cat_id'],
-        //     'service_sub_category' => $input['service_sub_cat_id'],
-        //     'service_subsub_category' => $input['service_subsub_cat_id'],
+            'applicant_address' => $input['applicant_address'],
+            'applicant_country' => $input['applicant_country'],
+            'applicant_state' => $input['applicant_state'],
+            'applicant_city' => $input['applicant_city'],
 
-        //     'bank_name' => $input['bank_name'],
-        //     'bank_swift_code' => $input['bank_swift_code'],
-        //     'bank_address' => $input['bank_address'],
+            'service_category' => $input['service_cat_id'],
+            'service_sub_category' => $input['service_sub_cat_id'],
+            'service_subsub_category' => $input['service_subsub_cat_id'],
 
-        //     'beneficiary_first_name' => $input['beneficiary_first_name'],
-        //     'beneficiary_last_name' => $input['beneficiary_last_name'],
-        //     'beneficiary_email' => $input['beneficiary_email'],
+            'bank_name' => $input['bank_name'],
+            'bank_swift_code' => $input['bank_swift_code'],
+            'bank_address' => $input['bank_address'],
 
-        //     'beneficiary_address' => $input['beneficiary_address'],
-        //     'beneficiary_country' => $input['beneficiary_country'],
-        //     'beneficiary_state' => $input['beneficiary_state'],
-        //     'beneficiary_city' => $input['beneficiary_city'],
+            'beneficiary_first_name' => $input['beneficiary_first_name'],
+            'beneficiary_last_name' => $input['beneficiary_last_name'],
+            'beneficiary_email' => $input['beneficiary_email'],
 
-        //     'beneficiary_account_no' => $input['beneficiary_account_no'],
-        //     'guarantee_amount' => $input['guarantee_amount'],
-        //     'letter_type' => $input['letter_type'],
-        // ]);
-        // $currentDate = Carbon::now()->format('Y-m-d_H-i-s');
-        // $filename = 'customer_draft_' . $input['applicant_first_name'] . '_' . $input['applicant_last_name'] . '_'  . $currentDate . '.pdf';
-        // // Save the PDF to the storage or serve it for download
-        // $pdf->save(storage_path('app/public/' . $filename));
+            'beneficiary_address' => $input['beneficiary_address'],
+            'beneficiary_country' => $input['beneficiary_country'],
+            'beneficiary_state' => $input['beneficiary_state'],
+            'beneficiary_city' => $input['beneficiary_city'],
+
+            'beneficiary_account_no' => $input['beneficiary_account_no'],
+            'guarantee_amount' => $input['guarantee_amount'],
+            'letter_type' => $input['letter_type'],
+        ]);
+        $filename = 'customer_draft_' . $input['applicant_first_name'] . '_' . $input['applicant_last_name'] . '_'  . $currentDate . '.pdf';
+        $pdf->save(storage_path('app/public/' . $filename));
 
         session()->flash('success', 'Your request has been submitted successfully. Please await for admin approval. You will receive a notification via email or SMS once approved. Feel free to logout for now.');
 
@@ -231,15 +244,16 @@ class CustomerDraftsController extends AppBaseController
         $user = Auth::user();
         $userdata['stateid'] = State::where('name', $user['user_state'])->first()->id;
         $userdata['cityid'] = City::where('name', $user['user_city'])->first()->id;
-
+        
         // && in_array($subCategoryId, [1, 2, 3, 4]) && $subSubCategoryId == 37)
         $formFields = '';
+        $currency = Currency::all();
         if ($categoryId == 1) {
-            $formFields = view('customer.customer_drafts.forms.1A1', compact('countries', 'userdata'))->render();
+            $formFields = view('customer.customer_drafts.forms.1A1', compact('countries', 'userdata', 'currency'))->render();
         } elseif ($categoryId == 2) {
-            $formFields = view('customer.customer_drafts.forms.2A1', compact('countries', 'userdata'))->render();
+            $formFields = view('customer.customer_drafts.forms.2A1', compact('countries', 'userdata', 'currency'))->render();
         } elseif ($categoryId == 3 && $subCategoryId == 8 && $subSubCategoryId == 7) {
-            $formFields = view('customer.customer_drafts.forms.3A1', compact('countries', 'userdata'))->render();
+            $formFields = view('customer.customer_drafts.forms.3A1', compact('countries', 'userdata', 'currency'))->render();
         } else {
             // Handle other cases or return a default form
             $formFields = '<p id="disable_next">No form available for the selected options.</p>';
