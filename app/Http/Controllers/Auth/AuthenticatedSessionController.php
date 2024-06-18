@@ -41,6 +41,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(RouteServiceProvider::Super_Admin_Dashboard);
         } elseif ($user->user_role == 2) {
             return redirect()->intended(RouteServiceProvider::Customer_Dashboard);
+        }elseif ($user->user_role == 3) {
+            return redirect()->intended(RouteServiceProvider::Admin_Dashboard);
         }
 
         // Default redirect (you can change this to whatever you want)

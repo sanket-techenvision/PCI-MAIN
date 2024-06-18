@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\CustomerController;
@@ -78,4 +79,9 @@ Route::middleware(['auth', 'superadmin'])->group(function () {
     Route::resource('serviceSubSubCategories', ServiceSubSubCategoryController::class);
     Route::resource('banks', BanksController::class);
     Route::resource('drafts', DraftsController::class);
+});
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin-dashboard');
+    Route::get('/admin-profile', [AdminController::class, 'index'])->name('admin-profile');
+    Route::get('/get-customer-drafts', [AdminController::class, 'customer_drafts'])->name('customer-drafts');
 });

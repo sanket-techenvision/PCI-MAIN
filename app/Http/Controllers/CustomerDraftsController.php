@@ -261,4 +261,9 @@ class CustomerDraftsController extends AppBaseController
 
         return response($formFields);
     }
+
+    public static function getCustomerDrafts(Request $request){
+        $data = CustomerDrafts::all();
+        return response()->json($data);
+    }
 }
