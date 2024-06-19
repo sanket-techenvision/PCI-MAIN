@@ -1,22 +1,21 @@
 @extends('admin.layouts.app')
 @section('content')
-<style>
-    .btn-group .btn {
-    /* Other styles for your button */
-    transition: transform 0.3s ease, box-shadow 0.2s ease; /* Smooth transition over 0.3 seconds */
-    transform-origin: center; /* Ensure scaling originates from the center of the button */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* Add a transparent box shadow for a smoother hover effect */
-}
+    <style>
+        .btn-group .btn {
+            transition: transform 0.3s ease, box-shadow 0.2s ease;
+            transform-origin: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+        }
 
-.btn-group .btn:hover {
-    transform: scale(1.1); /* Scale the button on hover */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add a slight box shadow on hover for depth */
-}
+        .btn-group .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 
-</style>
-    <div class="card-body p-0">
+    <div class="card p-3 m-1">
         <div class="table-responsive">
-            <table class="table" id="customer-drafts-table">
+            <table class="table table-sm table-striped" id="customerdrafts">
                 <thead>
                     <tr>
                         <th>Sr. No.</th>
@@ -27,8 +26,8 @@
                         <th>SubSub Service</th>
                         <th>Payment Status</th>
                         <th>Date</th>
-                        <th>Action</th>
                         <th>Approval Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,17 +44,14 @@
                             <td>{{ $draft['service_subsub_cat'] }}</td>
                             <td>{{ $draft['payment_status'] }}</td>
                             <td>{{ $draft['date'] }}</td>
+                            <td>{{ $draft['approval_status'] }}</td>
                             <td>
-                                <div class='btn-group'>
-                                    <a href="{{ route('customer-drafts.show', $draft['id']) }}" class="btn"
-                                        style="background-color: #3e60d5; color: #fff;"><i class="ri-eye-line">View</i>
-                                    </a>
-                                    <a href="{{ route('customer-drafts.edit', $draft['id']) }}" class="btn" 
-                                        style="background-color: #071de6; color: #fff;">Approve<i class="ri-check-line"></i>
-                                    </a>
-                                    <a href="{{ route('customer-drafts.edit', $draft['id']) }}" class="btn" 
-                                        style="background-color: #e6072c; color: #fff;">Reject<i class="ri-close-line"></i>
-                                    </a>
+                                <div class='form-group text-center'>
+                                    <div class='btn-group m-1'><a href="{{ route('admin.drafts.view', $draft['id']) }}"
+                                            class="btn" style="background-color: #3e60d5; color: #fff;"><i
+                                                class="ri-eye-line">View</i>
+                                        </a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -66,10 +62,12 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="card-footer clearfix">
-            <div class="float-right">
-            </div>
-        </div>
     </div>
+@endsection
+@section('datatable-script')
+    <script>
+        $(document).ready(function() {
+            $('#customerdrafts').DataTable();
+        });
+    </script>
 @endsection

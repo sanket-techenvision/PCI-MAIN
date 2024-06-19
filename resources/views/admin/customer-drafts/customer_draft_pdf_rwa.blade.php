@@ -66,7 +66,7 @@
         <p><span style="color: red;">{{$bank_name}}</span></p>
         <p><span style="color: red;">{{$bank_address}}</span></p>
         <footer>
-            <p> REF : EUR/RWA/23-05/0224.HC.JA </p>
+            <p> {{$reference}} </p>
         </footer>
     </div>
 </body>

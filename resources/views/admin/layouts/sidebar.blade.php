@@ -40,7 +40,7 @@
                 <div class="collapse" id="sidebarServiceCategories">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="{{ route('customer-drafts') }}">Customer Drafts</a>
+                            <a href="{{ route('admin.drafts.index') }}">Customer Drafts</a>
                         </li>
                     </ul>
                 </div>

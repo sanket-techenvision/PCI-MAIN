@@ -61,6 +61,7 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/get-subsub-categories/{subCategoryId}', [ServiceSubSubCategoryController::class, 'getSubSubCategories']);
     Route::get('/get-bank-data/{subCategoryId}', [BanksController::class, 'getBanksData']);
     Route::post('/get-dynamic-form', [CustomerDraftsController::class, 'getDynamicForm']);
+    Route::get('/downloaddraft/{id}', [CustomerDraftsController::class, 'downloaddraft'])->name('customer-drafts.downloaddraft');
 });
 
 
@@ -83,5 +84,8 @@ Route::middleware(['auth', 'superadmin'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin-dashboard');
     Route::get('/admin-profile', [AdminController::class, 'index'])->name('admin-profile');
-    Route::get('/get-customer-drafts', [AdminController::class, 'customer_drafts'])->name('customer-drafts');
+    Route::get('/get-customer-drafts', [AdminController::class, 'customer_drafts'])->name('admin.drafts.index');
+    Route::get('/get-customer-drafts/{id}', [AdminController::class, 'show'])->name('admin.drafts.view');
+    Route::get('/approve-customer-draft/{id}', [AdminController::class, 'approve_customer_draft'])->name('admin.drafts.approve');
+    Route::post('/reject-customer-drafs', [AdminController::class, 'reject_customer_draft'])->name('admin.drafts.reject');
 });

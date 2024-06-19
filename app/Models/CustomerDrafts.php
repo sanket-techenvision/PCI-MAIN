@@ -30,7 +30,10 @@ class CustomerDrafts extends Model
         'beneficiary_city',
         'beneficiary_account_no',
         'guarantee_amount',
-        'payment_status'
+        'payment_status',
+        'approval_status',
+        'reason',
+        'file_path'
     ];
 
     protected $casts = [
