@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@section('css')
+    @vite(['node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'])
+@endsection
 @section('content')
     <style>
         .btn-group .btn {
@@ -15,7 +18,7 @@
 
     <div class="card p-3 m-1">
         <div class="table-responsive">
-            <table class="table table-sm table-striped" id="customerdrafts">
+            <table class="table table-sm table-striped" id="basic-datatable">
                 <thead>
                     <tr>
                         <th>Sr. No.</th>
@@ -64,10 +67,6 @@
         </div>
     </div>
 @endsection
-@section('datatable-script')
-    <script>
-        $(document).ready(function() {
-            $('#customerdrafts').DataTable();
-        });
-    </script>
+@section('script')
+    @vite(['resources/js/pages/demo.datatable-init.js'])
 @endsection

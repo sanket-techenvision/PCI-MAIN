@@ -115,6 +115,27 @@
     </div>
 </div>
 
+<h3 for="ADVISING BANK">Contract DETAILS</h3>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="contract_no" class="form-label">Contract Number<span class="text-danger">*</span></label>
+        <input class="form-control @error('contract_no') is-invalid @enderror" type="text" id="contract_no"
+            name="contract_no" placeholder="Enter Contract Number" value="{{ old('contract_no') }}" required>
+        @error('contract_no')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-3 mb-3">
+        <label for="contract_date" class="form-label">Contract Date<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('contract_date') is-invalid @enderror" type="date"
+            id="contract_date" name="contract_date" placeholder="Select Contract Date"
+            value="{{ old('contract_date') }}" required>
+        @error('contract_date')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
 <!-- Country/State/City -->
 <script>
     $(document).ready(function() {

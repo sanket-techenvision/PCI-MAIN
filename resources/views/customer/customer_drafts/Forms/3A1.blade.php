@@ -132,6 +132,26 @@
         @enderror
     </div>
     <div class="col-md-6 mb-3">
+        <label for="beneficiary_bank_name" class="form-label">Beneficiary Bank Name<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_bank_name') is-invalid @enderror" type="text"
+            id="beneficiary_bank_name" name="beneficiary_bank_name" placeholder="Enter Beneficiary Bank Name"
+            value="{{ old('beneficiary_bank_name') }}" required>
+        @error('beneficiary_bank_name')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_bank_address" class="form-label">Beneficiary Bank Address<span
+                class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_bank_address') is-invalid @enderror" type="text"
+            id="beneficiary_bank_address" name="beneficiary_bank_address"
+            placeholder="Enter Beneficiary Bank Address" value="{{ old('beneficiary_bank_address') }}" required>
+        @error('beneficiary_bank_address')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6 mb-3">
         <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
         <div class="form-group">
             <select class="form-select select2 @error('currency_code') is-invalid @enderror" data-toggle="select2"
@@ -170,23 +190,23 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+</div>
+
+<h3 for="ADVISING BANK">Contract DETAILS</h3>
+<div class="row">
     <div class="col-md-6 mb-3">
-        <label for="beneficiary_bank_name" class="form-label">Beneficiary Bank Name<span
-                class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_bank_name') is-invalid @enderror" type="text"
-            id="beneficiary_bank_name" name="beneficiary_bank_name" placeholder="Enter Beneficiary Bank Name"
-            value="{{ old('beneficiary_bank_name') }}" required>
-        @error('beneficiary_bank_name')
+        <label for="contract_no" class="form-label">Contract Number<span class="text-danger">*</span></label>
+        <input class="form-control @error('contract_no') is-invalid @enderror" type="text" id="contract_no"
+            name="contract_no" placeholder="Enter Contract Number" value="{{ old('contract_no') }}" required>
+        @error('contract_no')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-md-6 mb-3">
-        <label for="beneficiary_bank_address" class="form-label">Beneficiary Bank Address<span
-                class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_bank_address') is-invalid @enderror" type="text"
-            id="beneficiary_bank_address" name="beneficiary_bank_address"
-            placeholder="Enter Beneficiary Bank Address" value="{{ old('beneficiary_bank_address') }}" required>
-        @error('beneficiary_bank_address')
+    <div class="col-md-3 mb-3">
+        <label for="contract_date" class="form-label">Contract Date<span class="text-danger">*</span></label>
+        <input class="form-control @error('contract_date') is-invalid @enderror" type="date" id="contract_date"
+            name="contract_date" placeholder="Select Contract Date" value="{{ old('contract_date') }}" required>
+        @error('contract_date')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
@@ -277,53 +297,79 @@
         var applicantFirstName = $('#applicant_first_name').val();
         var applicantLastName = $('#applicant_last_name').val();
         var applicantEmail = $('#applicant_email').val();
+
         var applicantAddress = $('#applicant_address').val();
         var applicantCountry = $('#applicant_country option:selected').text();
         var applicantState = $('#applicant_state option:selected').text();
         var applicantCity = $('#applicant_city option:selected').text();
+
         var serviceCategory = $('#Service_Category option:selected').text();
         var serviceSubCategory = $('#service_sub_cat_id option:selected').text();
         var serviceSubSubCategory = $('#service_subsub_cat_id option:selected').text();
         var bank = $('#bank_id option:selected').text();
+
         var beneficiaryFirstName = $('#beneficiary_first_name').val();
         var beneficiaryLastName = $('#beneficiary_last_name').val();
         var beneficiaryEmail = $('#beneficiary_email').val();
+
         var beneficiaryAddress = $('#beneficiary_address').val();
         var beneficiaryCountry = $('#beneficiary_country option:selected').text();
         var beneficiaryState = $('#beneficiary_state option:selected').text();
         var beneficiaryCity = $('#beneficiary_city option:selected').text();
+
         var beneficiaryAccountNo = $('#beneficiary_account_no').val();
+        var beneficiaryBankName = $('#beneficiary_bank_name').val();
+        var beneficiaryBankAddress = $('#beneficiary_bank_address').val();
+
+        var currencyCode = $('#currency_code').val();
+        var guaranteeAmount = $('#guarantee_amount').val();
+
+        var advisingSwiftCode = $('#advising_swift_code').val();
+
+        var contractNo = $('#contract_no').val();
+        var contractDate = $('#contract_date').val();
+
         // Append data to preview content
         previewContent.append(`
                 <div class="card shadow">
-                <h4>Service Details</h4>
-                <table class="table table-striped">
-                    <tr><th>Service Category</th><td>${serviceCategory}</td></tr>
-                    <tr><th>Service Sub Category</th><td>${serviceSubCategory}</td></tr>
-                    <tr><th>Service Subsub Category</th><td>${serviceSubSubCategory}</td></tr>
-                    <tr><th>Issuer Bank</th><td>${bank}</td></tr>
-                </table>
+                    <h4>Service Details</h4>
+                    <table class="table table-striped">
+                        <tr><th>Service Category</th><td>${serviceCategory}</td></tr>
+                        <tr><th>Service Sub Category</th><td>${serviceSubCategory}</td></tr>
+                        <tr><th>Service Subsub Category</th><td>${serviceSubSubCategory}</td></tr>
+                        <tr><th>Issuer Bank</th><td>${bank}</td></tr>
+                    </table>
                 <h4>Applicant Details</h4>
-                <table class="table table-striped">
-                    <tr><th>First Name</th><td>${applicantFirstName}</td></tr>
-                    <tr><th>Last Name</th><td>${applicantLastName}</td></tr>
-                    <tr><th>Email</th><td>${applicantEmail}</td></tr>
-                    <tr><th>Address</th><td>${applicantAddress}</td></tr>
-                    <tr><th>Country</th><td>${applicantCountry}</td></tr>
-                    <tr><th>State</th><td>${applicantState}</td></tr>
-                    <tr><th>City</th><td>${applicantCity}</td></tr>
-                </table>
+                    <table class="table table-striped">
+                        <tr><th>First Name</th><td>${applicantFirstName}</td></tr>
+                        <tr><th>Last Name</th><td>${applicantLastName}</td></tr>
+                        <tr><th>Email</th><td>${applicantEmail}</td></tr>
+                        <tr><th>Address</th><td>${applicantAddress}</td></tr>
+                        <tr><th>Country</th><td>${applicantCountry}</td></tr>
+                        <tr><th>State</th><td>${applicantState}</td></tr>
+                        <tr><th>City</th><td>${applicantCity}</td></tr>
+                    </table>
                 <h4>Beneficiary Details</h4>
-                <table class="table table-striped">
-                    <tr><th>First Name</th><td>${beneficiaryFirstName}</td></tr>
-                    <tr><th>Last Name</th><td>${beneficiaryLastName}</td></tr>
-                    <tr><th>Email</th><td>${beneficiaryEmail}</td></tr>
-                    <tr><th>Address</th><td>${beneficiaryAddress}</td></tr>
-                    <tr><th>Country</th><td>${beneficiaryCountry}</td></tr>
-                    <tr><th>State</th><td>${beneficiaryState}</td></tr>
-                    <tr><th>City</th><td>${beneficiaryCity}</td></tr>
-                    <tr><th>Account No</th><td>${beneficiaryAccountNo}</td></tr>
-                </table>
+                    <table class="table table-striped">
+                        <tr><th>First Name</th><td>${beneficiaryFirstName}</td></tr>
+                        <tr><th>Last Name</th><td>${beneficiaryLastName}</td></tr>
+                        <tr><th>Email</th><td>${beneficiaryEmail}</td></tr>
+                        <tr><th>Address</th><td>${beneficiaryAddress}</td></tr>
+                        <tr><th>Country</th><td>${beneficiaryCountry}</td></tr>
+                        <tr><th>State</th><td>${beneficiaryState}</td></tr>
+                        <tr><th>City</th><td>${beneficiaryCity}</td></tr>
+                        <tr><th>Account No</th><td>${beneficiaryAccountNo}</td></tr>
+                        
+                        <tr><th>Beneficiary Bank Name</th><td>${beneficiaryBankName}</td></tr>
+                        <tr><th>Beneficiary Bank Address</th><td>${beneficiaryBankAddress}</td></tr>
+                        <tr><th></th><td>${currencyCode} - ${guaranteeAmount}</td></tr>
+                    </table>
+                <h4>Contract Details</h4>
+                    <table class="table table-striped">
+                        <tr><th>Advising Swift Code</th><td>${advisingSwiftCode}</td></tr>
+                        <tr><th>Contract No</th><td>${contractNo}</td></tr>
+                        <tr><th>Contract Date</th><td>${contractDate}</td></tr>
+                    </table>
                 </div>
                 `);
     }

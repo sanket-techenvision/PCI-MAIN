@@ -1,6 +1,6 @@
-<div class="card-body p-0">
+<div class="card-body p-1">
     <div class="table-responsive">
-        <table class="table table-sm" id="customer-drafts-table">
+        <table class="table table-sm" id="basic-datatable">
             <thead>
                 <tr>
                     <th>Sr. No.</th>

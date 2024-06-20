@@ -10,28 +10,45 @@ class CustomerDrafts extends Model
 
     public $fillable = [
         'user_id',
+
         'applicant_first_name',
         'applicant_last_name',
         'applicant_email',
+
         'applicant_address',
         'applicant_country',
         'applicant_state',
         'applicant_city',
+
         'service_cat_id',
         'service_sub_cat_id',
         'service_subsub_cat_id',
         'bank_id',
+
         'beneficiary_first_name',
         'beneficiary_last_name',
         'beneficiary_email',
+
         'beneficiary_address',
         'beneficiary_country',
         'beneficiary_state',
         'beneficiary_city',
+
         'beneficiary_account_no',
+        'beneficiary_bank_name',
+        'beneficiary_bank_address',
+
+        'currency_code',
         'guarantee_amount',
+
+        'advising_swift_code',
+        'contract_no',
+        'contract_date',
+
         'payment_status',
         'approval_status',
+
+        'approve_notice',
         'reason',
         'file_path'
     ];
@@ -86,7 +103,15 @@ class CustomerDrafts extends Model
         'beneficiary_city' => 'nullable|string|max:255',
 
         'beneficiary_account_no' => 'required|string|max:255',
+        'beneficiary_bank_name' => 'nullable|string|max:255',
+        'beneficiary_bank_address' => 'nullable|string|max:255',
+        'currency_code' => 'required|string|max:255',
         'guarantee_amount' => 'required|string|max:255',
+
+        'advising_swift_code' =>  'required|string|max:255',
+        'contract_no' => 'required|string|max:255',
+        'contract_date' => 'required|string|max:255',
+        
         'payment_status' => 'required|string|max:255',
 
         'created_at' => 'nullable',

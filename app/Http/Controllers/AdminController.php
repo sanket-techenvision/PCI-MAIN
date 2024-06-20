@@ -109,15 +109,17 @@ class AdminController extends Controller
         return view('admin.customer-drafts.index', compact('data'));
     }
 
-    public function approve_customer_draft(Request $request, $id)
+    public function approve_customer_draft(Request $request)
     {
         // Fetch the record by its ID
-        $customerDraft = CustomerDrafts::find($id);
+        $customerDraft = CustomerDrafts::find($request->id);
 
         // Check if the record exists and the current status is 'pending'
         if ($customerDraft && $customerDraft->approval_status == 'pending') {
             // Update the status to 'approved'
             $customerDraft->approval_status = 'approved';
+            $customerDraft->approve_notice = $request->approve_notice;
+
             $customerDraft->save();
 
             $bank_name = Banks::where('bank_id', $customerDraft['bank_id'])->first()->bank_name;
@@ -179,6 +181,8 @@ class AdminController extends Controller
 
                 'beneficiary_account_no' => $customerDraft['beneficiary_account_no'],
                 'guarantee_amount' => $customerDraft['guarantee_amount'],
+                'contract_no' => $customerDraft['contract_no'],
+                'contract_date' => $customerDraft['contract_date'],
                 'letter_type' => $letter_type,
                 'reference' => $reference_name,
             ]);

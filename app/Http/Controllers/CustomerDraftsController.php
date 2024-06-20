@@ -40,14 +40,15 @@ class CustomerDraftsController extends AppBaseController
         $user_id = Auth::user()->user_id;
 
         $customerDrafts = CustomerDrafts::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
-        $srno = 1;
+        $draftcount = $customerDrafts->count();
+        $srno = $draftcount;
         foreach ($customerDrafts as $data) {
             $data['service_category'] = Service_Category::where('service_cat_id', $data['service_cat_id'])->first()->service_cat_name;
             $data['service_sub_category'] = Service_Sub_Category::where('service_sub_cat_id', $data['service_sub_cat_id'])->first()->service_sub_cat_name;
             $data['service_subsub_category'] = ServiceSubSubCategory::where('service_subsub_cat_id', $data['service_subsub_cat_id'])->first()->service_subsub_cat_name;
             $data['bank_name'] = Banks::where('bank_id', $data['bank_id'])->first()->bank_name;
             $data['srno'] = $srno;
-            $srno++;
+            $srno --;
         }
         // dd($customerDrafts);
 

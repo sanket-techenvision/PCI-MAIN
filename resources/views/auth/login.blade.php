@@ -5,7 +5,7 @@
     @include('layouts.shared/title-meta', ['title' => 'Log In'])
     @include('layouts.shared/head-css')
     @vite(['resources/js/head.js'])
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/css/intlTelInput.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/css/intlTelInput.css">
     <style>
     .iti {
         width: 100%;
@@ -269,13 +269,13 @@
     </footer>
     @vite(['resources/js/app.js'])
     @include('layouts.shared/footer-script')
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/intlTelInput.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/js/intlTelInput.min.js"></script>
     <script>
         const input = document.querySelector("#user_mobile");
         const iti = window.intlTelInput(input, {
             separateDialCode: true,
             initialCountry: "in",
-            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/utils.js",
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/js/utils.js",
         });
         input.addEventListener('input', function() {
             this.value = this.value.replace(/\D/g, '');

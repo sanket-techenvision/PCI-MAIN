@@ -146,13 +146,24 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to approve this draft?</p>
-                    </div>
-                    <div class="modal-footer">
+                    <form action="{{ route('admin.drafts.approve', $data['id']) }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="approve_notice">Any notice for customer? (optional)</label>
+                                <input type="hidden" name="id" value="{{ $data['id'] }}" required>
+                                <textarea class="form-control" id="approve_notice" name="approve_notice" rows="3"  placeholder="Enter your notice for the customer here..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    {{-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <a href="{{ route('admin.drafts.approve', $data['id']) }}" class="btn btn-primary">Approve</a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

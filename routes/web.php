@@ -86,6 +86,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin-profile', [AdminController::class, 'index'])->name('admin-profile');
     Route::get('/get-customer-drafts', [AdminController::class, 'customer_drafts'])->name('admin.drafts.index');
     Route::get('/get-customer-drafts/{id}', [AdminController::class, 'show'])->name('admin.drafts.view');
-    Route::get('/approve-customer-draft/{id}', [AdminController::class, 'approve_customer_draft'])->name('admin.drafts.approve');
+    Route::post('/approve-customer-draft', [AdminController::class, 'approve_customer_draft'])->name('admin.drafts.approve');
     Route::post('/reject-customer-drafs', [AdminController::class, 'reject_customer_draft'])->name('admin.drafts.reject');
 });
