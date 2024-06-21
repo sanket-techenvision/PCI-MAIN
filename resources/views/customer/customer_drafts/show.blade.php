@@ -27,16 +27,22 @@
         /* Status-specific background colors */
         .status-approved {
             background-color: #28a745;
+            border: #28a745;
+            color: #ffffff;
             /* Green */
         }
 
         .status-pending {
             background-color: #ffc107;
+            border:#ffc107;
+            color: #ffffff;
             /* Yellow */
         }
 
         .status-rejected {
             background-color: #dc3545;
+            border:#ffc107;
+            color: #ffffff;
             /* Red */
         }
     </style>
@@ -63,7 +69,7 @@
         <div class="card p-2 position-relative" style="overflow: hidden;">
             <div
                 class="status-ribbon 
-            @if ($approval_status == 'approved') status-approved 
+            @if ($approval_status == 'generated') status-approved 
             @elseif($approval_status == 'pending') status-pending 
             @elseif($approval_status == 'rejected') status-rejected @endif">
                 {{ $approval_status }}
@@ -81,15 +87,15 @@
             </div>
             @if ($isApproved)
                 <div class="form-group text-center">
-                    <a href="{{ route('customer-drafts.downloaddraft', [$customerDrafts->id]) }}" class="btn"
-                        style="background-color: #003cff; color: #fff;">
-                        Download Draft <i class="ri-file-download-line fs-3"></i>
+                    <a href="{{ route('customer-drafts.downloaddraft', [$customerDrafts->id]) }}" class="btn btn-primary status-approved">
+                        Download Draft <i class="ri-download-line fs-3"></i>
                     </a>
                 </div>
             @endif
 
         </div>
     </div>
+    
     <!-- Modal -->
     <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel"
         aria-hidden="true">

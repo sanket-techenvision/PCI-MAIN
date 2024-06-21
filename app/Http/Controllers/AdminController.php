@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ApproveDraftMail;
+use App\Mail\GenerateDraftMail;
 use App\Mail\RejectDraftMail;
 use App\Models\Banks;
 use App\Models\Country;
@@ -114,10 +114,10 @@ class AdminController extends Controller
         // Fetch the record by its ID
         $customerDraft = CustomerDrafts::find($request->id);
 
-        // Check if the record exists and the current status is 'pending'
-        if ($customerDraft && $customerDraft->approval_status == 'pending') {
-            // Update the status to 'approved'
-            $customerDraft->approval_status = 'approved';
+        // Check if the record exists and the current status is 'pending' and not generated
+        if ($customerDraft && $customerDraft->approval_status == 'pending'  && $customerDraft->approval_status != 'generated') {
+            // Update the status to 'generated'
+            $customerDraft->approval_status = 'generated';
             $customerDraft->approve_notice = $request->approve_notice;
 
             $customerDraft->save();
@@ -194,15 +194,15 @@ class AdminController extends Controller
             $customerDraft->file_path = 'public/' . $filename;
             $customerDraft->save();
             $details = [
-                'subject' => 'Draft Approval Notice',
-                'title' => 'Your draft has been approved',
-                'body' => 'Congratulations! Your draft has been approved. You can view the approved draft attached below.',
+                'subject' => 'Draft Generated Notice',
+                'title' => 'Your draft has been generated',
+                'body' => 'Congratulations! Your draft has been generated. You can view the generated draft attached below.',
             ];
-            Mail::to($customerDraft->applicant_email)->send(new ApproveDraftMail($details, $filename));
+            Mail::to($customerDraft->applicant_email)->send(new GenerateDraftMail($details, $filename));
 
             // Optional: return a response or redirect based on your application flow
-            return redirect()->route('admin.drafts.index')->with('success', 'The draft was approved and a notification email was sent successfully...!!!');
-        } elseif ($customerDraft && $customerDraft->approval_status == 'approved') {
+            return redirect()->route('admin.drafts.index')->with('success', 'The draft was generated and a notification email was sent successfully...!!!');
+        } elseif ($customerDraft && $customerDraft->approval_status == 'generated') {
             return redirect()->route('admin.drafts.index')->with('error', 'Already Approved...!');
         } else {
             return redirect()->back()->with('error', 'Draft Not Found...!');

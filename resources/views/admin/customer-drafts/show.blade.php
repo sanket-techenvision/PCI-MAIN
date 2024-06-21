@@ -152,7 +152,8 @@
                             <div class="form-group">
                                 <label for="approve_notice">Any notice for customer? (optional)</label>
                                 <input type="hidden" name="id" value="{{ $data['id'] }}" required>
-                                <textarea class="form-control" id="approve_notice" name="approve_notice" rows="3"  placeholder="Enter your notice for the customer here..."></textarea>
+                                <textarea class="form-control" id="approve_notice" name="approve_notice" rows="3"
+                                    placeholder="Enter your notice for the customer here..."></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -176,7 +177,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="rejectModalLabel">Reject Draft</h5>
-                        <button type="button" class="close btn btn-danger"  data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -199,4 +200,68 @@
         </div>
         {{-- End -> Draft Reject Modal with Reason Field --}}
     </div>
+
+    <!-- Pre-loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <!-- End Preloader-->
+@endsection
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+    {{-- Loader Before Window Load and at data submission --}}
+    <script>
+        $(window).on('load', function() {
+            $('#status').fadeOut();
+            $('#preloader').delay(350).fadeOut('slow');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to show the preloader
+            function showLoader() {
+                document.getElementById('preloader').style.display = 'block';
+                document.getElementById('status').style.display = 'block';
+            }
+
+            // Function to hide the preloader
+            function hideLoader() {
+                document.getElementById('preloader').style.display = 'none';
+                document.getElementById('status').style.display = 'none';
+            }
+
+            // Show the loader initially on page load
+            showLoader();
+
+            // Get the approval form
+            const approveForm = document.querySelector('#approveModal form');
+            if (approveForm) {
+                approveForm.addEventListener('submit', function(event) {
+                    showLoader();
+                });
+            }
+
+            // Get the reject form
+            const rejectForm = document.querySelector('#rejectModal form');
+            if (rejectForm) {
+                rejectForm.addEventListener('submit', function(event) {
+                    showLoader();
+                });
+            }
+
+            // Optionally, you can hide the loader when the modal is closed
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('hidden.bs.modal', function() {
+                    hideLoader();
+                });
+            });
+        });
+    </script>
 @endsection

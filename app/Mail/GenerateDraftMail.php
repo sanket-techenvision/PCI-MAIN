@@ -7,22 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Queue\SerializesModels;
 
-class RejectDraftMail extends Mailable
+class GenerateDraftMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    // custom
     public $details;
+    public $filename;
     /**
      * Create a new message instance.
      */
-    public function __construct($details)
+    public function __construct($details, $filename)
     {
         //custom
         $this->details = $details;
+        $this->filename = $filename;
     }
+
 
     /**
      * Get the message envelope.
@@ -30,7 +33,7 @@ class RejectDraftMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Draft Rejected Notification',
+            subject: 'Draft Generated',
         );
     }
 
@@ -40,7 +43,7 @@ class RejectDraftMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.mails.rejectMail',
+            view: 'admin.mails.approveMail',
         );
     }
 
@@ -51,6 +54,11 @@ class RejectDraftMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        // return [];
+        return [
+            Attachment::fromPath(storage_path('app/public/' . $this->filename))
+                ->as('Generated_Draft.pdf')
+                ->withMime('application/pdf')
+        ];
     }
 }

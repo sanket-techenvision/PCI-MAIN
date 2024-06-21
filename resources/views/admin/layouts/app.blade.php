@@ -13,6 +13,7 @@
         textarea:focus {
             border: 1px solid #3e60d5 !important;
         }
+
         input,
         select,
         textarea {
@@ -51,41 +52,41 @@
     @yield('script')
 
     <!-- Session Message -->
-    @if(session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                confirmButtonText: 'OK'
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
             });
-        });
-    </script>
+        </script>
     @endif
-    @if(session('error'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                title: 'Error!',
-                text: "{{ session('error') }}",
-                icon: 'error',
-                confirmButtonText: 'OK'
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             });
-        });
-    </script>
+        </script>
     @endif
-    @if($errors->any())
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                title: 'Error!',
-                text: "{{ $errors->first() }}",
-                icon: 'error',
-                confirmButtonText: 'OK'
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "{{ $errors->first() }}",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             });
-        });
-    </script>
+        </script>
     @endif
 
 </body>

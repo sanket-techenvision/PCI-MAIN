@@ -62,6 +62,7 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/get-bank-data/{subCategoryId}', [BanksController::class, 'getBanksData']);
     Route::post('/get-dynamic-form', [CustomerDraftsController::class, 'getDynamicForm']);
     Route::get('/downloaddraft/{id}', [CustomerDraftsController::class, 'downloaddraft'])->name('customer-drafts.downloaddraft');
+    Route::get('/downloaddraftword/{id}', [CustomerDraftsController::class, 'downloaddraftword'])->name('customer-drafts.downloaddraftword');
 });
 
 

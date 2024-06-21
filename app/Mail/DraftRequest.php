@@ -7,25 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Queue\SerializesModels;
 
-class ApproveDraftMail extends Mailable
+class DraftRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $details;
-    public $filename;
     /**
      * Create a new message instance.
      */
-    public function __construct($details, $filename)
+    public function __construct($details)
     {
-        //custom
+        //
         $this->details = $details;
-        $this->filename = $filename;
     }
-
 
     /**
      * Get the message envelope.
@@ -33,7 +29,7 @@ class ApproveDraftMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Approve Draft Mail',
+            subject: 'New Draft Request',
         );
     }
 
@@ -43,7 +39,7 @@ class ApproveDraftMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.mails.approveMail',
+            view: 'admin.mails.draftrequest',
         );
     }
 
@@ -54,11 +50,6 @@ class ApproveDraftMail extends Mailable
      */
     public function attachments(): array
     {
-        // return [];
-        return [
-            Attachment::fromPath(storage_path('app/public/' . $this->filename))
-                ->as('Approved_Draft.pdf')
-                ->withMime('application/pdf')
-        ];
+        return [];
     }
 }

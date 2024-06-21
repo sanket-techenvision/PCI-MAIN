@@ -9,18 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RejectDraftMail extends Mailable
+class CustomerDraftRequest extends Mailable
 {
     use Queueable, SerializesModels;
-
-    // custom
     public $details;
     /**
      * Create a new message instance.
      */
     public function __construct($details)
     {
-        //custom
+        //
         $this->details = $details;
     }
 
@@ -30,7 +28,7 @@ class RejectDraftMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Draft Rejected Notification',
+            subject: 'Draft Request Acknowledgement',
         );
     }
 
@@ -40,7 +38,7 @@ class RejectDraftMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.mails.rejectMail',
+            view: 'admin.mails.customerDraftRequest',
         );
     }
 

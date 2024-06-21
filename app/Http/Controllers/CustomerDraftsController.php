@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateCustomerDraftsRequest;
 use App\Http\Requests\UpdateCustomerDraftsRequest;
 use App\Http\Controllers\AppBaseController;
+use App\Mail\CustomerDraftRequest;
+use App\Mail\DraftRequest;
 use App\Models\Banks;
 use App\Models\City;
 use App\Models\Service_Category;
@@ -20,6 +22,7 @@ use App\Models\CustomerDrafts;
 use App\Models\State;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerDraftsController extends AppBaseController
@@ -84,7 +87,20 @@ class CustomerDraftsController extends AppBaseController
         $input['beneficiary_state'] = State::where('id', $input['beneficiary_state'])->first()->name;
         $input['beneficiary_city'] = City::where('id', $input['beneficiary_city'])->first()->name;
 
-        $customerDrafts = $this->customerDraftsRepository->create($input);
+        // $customerDrafts = $this->customerDraftsRepository->create($input);
+        $details = [
+            'subject' => 'New Draft Request',
+            'requested_by' => $input['applicant_first_name'] . ' ' . $input['applicant_last_name'],
+            'submitted_by' => Auth::user()->user_first_name . ' ' . Auth::user()->user_last_name,
+            'title' => 'New draft request created',
+            'body' => 'A new draft/service/request has been submitted for approval. Here are the details:',
+        ];
+        // dd($details);
+        // Send Mail To Admin
+        Mail::to('sanket@techenvision.in')->send(new DraftRequest($details));
+        
+        // Send Mail to Customer/applicant
+        Mail::to($input['applicant_email'])->send(new CustomerDraftRequest($details));
 
         session()->flash('success', 'Your request has been submitted successfully. Please await for admin approval. You will receive a notification via email or SMS once approved. Feel free to logout for now.');
 
@@ -108,7 +124,7 @@ class CustomerDraftsController extends AppBaseController
         $customerDrafts['service_subsub_cat_id'] = ServiceSubSubCategory::where('service_subsub_cat_id', $customerDrafts['service_subsub_cat_id'])->first()->service_subsub_cat_name;
         $customerDrafts['bank_id'] = Banks::where('bank_id', $customerDrafts['bank_id'])->first()->bank_name;
         // dd($customerDrafts);
-        $isApproved = ($customerDrafts->approval_status == 'approved');
+        $isApproved = ($customerDrafts->approval_status == 'generated');
         $isRejected = ($customerDrafts->approval_status == 'rejected');
         return view('customer.customer_drafts.show', [
             'customerDrafts' => $customerDrafts,
@@ -175,6 +191,7 @@ class CustomerDraftsController extends AppBaseController
 
         return redirect(route('customer-drafts.index'));
     }
+
     public function getDynamicForm(Request $request)
     {
         $categoryId = $request['categoryId'];
@@ -207,9 +224,10 @@ class CustomerDraftsController extends AppBaseController
         $data = CustomerDrafts::all();
         return response()->json($data);
     }
+
     public function downloaddraft($id){
         // dd($id);
-        $data = CustomerDrafts::select('*')->where('id', $id)->where('approval_status', 'approved')->first();
+        $data = CustomerDrafts::select('*')->where('id', $id)->where('approval_status', 'generated')->first();
         if ($data) {
             $filePath = $data->file_path;
             // dd($filePath);
@@ -222,7 +240,50 @@ class CustomerDraftsController extends AppBaseController
                 return redirect()->back()->with('error', 'Draft PDF not found in storage');
             }
         } else {
-            return redirect()->back()->with('error', 'Draft PDF not found or not approved...!');
+            return redirect()->back()->with('error', 'Draft PDF not generated or not approved...!');
+        }
+    }
+
+    public function downloaddraftword($id){
+        // dd($id);
+        $data = CustomerDrafts::select('*')->where('id', $id)->where('approval_status', 'generated')->first();
+        if ($data) {
+            $filePath = $data->file_path;
+            // dd($filePath);
+            // Check if the file exists in storage
+            if (Storage::exists($filePath)) {
+                // dd($filePath);
+                 // Initialize the ILovePDF API client
+                $ilovepdf = new Ilovepdf('project_public_298c57a0b74c85b8d0ed9d002eb78f7c__cWqO9ab7d217b87a2b926ee326622ea6ca2f', 
+                'secret_key_41b5460fb79161d0f0ff64837aa9fca6_SVzdeba9a21f25049ef3a66c2d3b650564a79');
+
+                // Create a new task
+                $myTask = $ilovepdf->newTask('pdfa');
+
+                $file = $myTask->addFile(storage_path('app/' . $filePath));
+                // dd($file);
+
+                // Execute the task
+                $myTask->execute();
+
+                // Define the path where the converted file will be saved
+                $convertedFilePath = storage_path('app/public/drafts/') . pathinfo($filePath, PATHINFO_FILENAME) . '.docx';
+                
+                // Download the converted file
+                $downloadUrl = $myTask->download(storage_path('app/public/drafts/'));
+
+                return response()->download($convertedFilePath);
+                // Get the path of the converted Word file
+                // $wordPath = str_replace('.pdf', '.docx', storage_path('app/public/drafts/'));
+
+                // return response()->download($wordPath);
+            } else {
+                // File does not exist in storage
+                return redirect()->back()->with('error', 'Draft PDF not found in storage');
+            }
+        }
+        else{
+            return redirect()->back()->with('error', 'Not approved');
         }
     }
 }
