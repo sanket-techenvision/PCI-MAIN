@@ -9,9 +9,9 @@
                     <th>Service Subsub Category</th>
                     <th>Bank</th>
                     <th>Payment Status</th>
-                    <th>Approval Status</th>
+                    <th>Draft Status</th>
                     <th>Actions</th>
-                    <th>Change Request</th>
+                    <th>Change Request/Confirm</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,7 +22,7 @@
                         <td>{{ $customerDrafts->service_sub_category }}</td>
                         <td>{{ $customerDrafts->service_subsub_category }}</td>
                         <td>{{ $customerDrafts->bank_name }}</td>
-                        
+
                         <td class="text-center align-middle" style="color: green"><i
                                 class="ri-money-dollar-circle-line fs-3"></i></td>
                         {{-- Draft Status --}}
@@ -51,7 +51,7 @@
                                 @endif
                                 @if ($customerDrafts->approval_status == 'generated')
                                     <a href="{{ route('customer-drafts.downloaddraft', [$customerDrafts->id]) }}"
-                                        class="btn btn-sm" style="background-color: #003cff; color: #fff;">
+                                        class="btn btn-sm" style="background-color: #3e60d5; color: #fff;">
                                         <i class="ri-download-line"></i>
                                     </a>
                                 @endif
@@ -59,11 +59,30 @@
                         </td>
                         {{-- Trigger change request modal --}}
                         <td class="text-center align-middle">
-                            <button class="btn btn-sm btn-primary fs-6" data-bs-toggle="modal"
-                                data-id="{{ $customerDrafts->id }}" data-bs-target="#ChangeRequestModal"
-                                data-approval-status = "{{ $customerDrafts->approval_status }}">
-                                <i class="ri-arrow-up-down-line"></i>Change Request
-                            </button>
+                            <div class="btn-group">
+
+                                @if ($customerDrafts->approval_status == 'generated')
+                                    <button class="btn btn-sm fs-6 text-dark" style="background-color: #ffc107;"
+                                        data-bs-toggle="modal" data-id="{{ $customerDrafts->id }}"
+                                        data-bs-target="#ChangeRequestModal"
+                                        data-approval-status = "{{ $customerDrafts->approval_status }}">
+                                        <i class="ri-arrow-up-down-line"></i>Change Request
+                                    </button>
+
+                                    <button class="btn btn-sm btn-success fs-6" data-bs-toggle="modal"
+                                        data-id="{{ $customerDrafts->id }}" data-bs-target="#confirmDraftModal"
+                                        data-approval-status = "{{ $customerDrafts->approval_status }}">
+                                        <i class="ri-arrow-up-line"></i>Confirm Draft
+                                    </button>
+                                @endif
+                            </div>
+                            @if ($customerDrafts->approval_status == 'rejected')
+                                <h3 class="text-center text-uppercase">
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#reasonModal">View
+                                        Reason</button>
+                                </h3>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -72,7 +91,7 @@
     </div>
 
     {{-- Chagne request modal --}}
-    <div class="modal fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel"
+    <div class="modal modal-lg fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content m-2">
@@ -81,9 +100,10 @@
                     <button type="button" class="close btn btn-light" data-bs-dismiss="modal" aria-label="Close"><span
                             class="fs-4">&times;</span></button>
                 </div>
-                <div class="ms-2" id="generatedContent" style="display: none;">
-                    <a id="downloadLink" href="#"><i class="ri-file-word-line fs-2"></i> Download Draft in Word Format</a>
-                </div>
+                {{-- <div class="ms-2" id="generatedContent" style="display: none;">
+                    <a id="downloadLink" href="#"><i class="ri-file-word-line fs-2"></i> Download Draft in Word
+                        Format</a>
+                </div> --}}
                 <form name="changerequestform" action="" method="post">
                     <div class="modal-body">
                         <input type="hidden" class="form-control" id="modalDraftId" value=""></input>
@@ -103,6 +123,24 @@
         </div>
     </div>
     {{-- End modal --}}
+
+    <!-- Rejection sModal -->
+    <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="reasonModalLabel">Reason For Rejection</h5>
+                    <button type="button" class="close btn btn-light" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{--   get draft id in modal --}}
     <script>
@@ -130,4 +168,10 @@
         });
     </script>
 
+    {{-- Editor Script --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            CKEDITOR.replace('chnageinrequest');
+        });
+    </script>
 </div>

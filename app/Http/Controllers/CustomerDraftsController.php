@@ -13,7 +13,7 @@ use App\Models\Service_Category;
 use App\Models\Service_Sub_Category;
 use App\Models\ServiceSubSubCategory;
 use App\Repositories\CustomerDraftsRepository;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 use App\Models\Country;
@@ -22,8 +22,13 @@ use App\Models\CustomerDrafts;
 use App\Models\State;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\Shared\Html;
 
 class CustomerDraftsController extends AppBaseController
 {
@@ -51,7 +56,7 @@ class CustomerDraftsController extends AppBaseController
             $data['service_subsub_category'] = ServiceSubSubCategory::where('service_subsub_cat_id', $data['service_subsub_cat_id'])->first()->service_subsub_cat_name;
             $data['bank_name'] = Banks::where('bank_id', $data['bank_id'])->first()->bank_name;
             $data['srno'] = $srno;
-            $srno --;
+            $srno--;
         }
         // dd($customerDrafts);
 
@@ -98,7 +103,7 @@ class CustomerDraftsController extends AppBaseController
         // dd($details);
         // Send Mail To Admin
         Mail::to('sanket@techenvision.in')->send(new DraftRequest($details));
-        
+
         // Send Mail to Customer/applicant
         Mail::to($input['applicant_email'])->send(new CustomerDraftRequest($details));
 
@@ -220,12 +225,14 @@ class CustomerDraftsController extends AppBaseController
         return response($formFields);
     }
 
-    public static function getCustomerDrafts(Request $request){
+    public static function getCustomerDrafts(Request $request)
+    {
         $data = CustomerDrafts::all();
         return response()->json($data);
     }
 
-    public function downloaddraft($id){
+    public function downloaddraft($id)
+    {
         // dd($id);
         $data = CustomerDrafts::select('*')->where('id', $id)->where('approval_status', 'generated')->first();
         if ($data) {
@@ -244,46 +251,96 @@ class CustomerDraftsController extends AppBaseController
         }
     }
 
-    public function downloaddraftword($id){
+    public function downloaddraftword($id)
+    {
         // dd($id);
         $data = CustomerDrafts::select('*')->where('id', $id)->where('approval_status', 'generated')->first();
         if ($data) {
-            $filePath = $data->file_path;
-            // dd($filePath);
-            // Check if the file exists in storage
-            if (Storage::exists($filePath)) {
-                // dd($filePath);
-                 // Initialize the ILovePDF API client
-                $ilovepdf = new Ilovepdf('project_public_298c57a0b74c85b8d0ed9d002eb78f7c__cWqO9ab7d217b87a2b926ee326622ea6ca2f', 
-                'secret_key_41b5460fb79161d0f0ff64837aa9fca6_SVzdeba9a21f25049ef3a66c2d3b650564a79');
 
-                // Create a new task
-                $myTask = $ilovepdf->newTask('pdfa');
+            $pdfPath = $data['file_path'];
 
-                $file = $myTask->addFile(storage_path('app/' . $filePath));
-                // dd($file);
+            if (Storage::exists($pdfPath)) {
+                $bank_name = Banks::where('bank_id', $data['bank_id'])->first()->bank_name;
+                $bank_swift_code = Banks::where('bank_id', $data['bank_id'])->first()->bank_swift_code;
+                $bank_address = Banks::where('bank_id', $data['bank_id'])->first()->bank_address;
+                $letter_type = '';
+                $service_SubSub_Cats = ServiceSubSubCategory::all();
+                if ($data['service_cat_id'] == 1) {
+                    $subsubcatid = $data['service_subsub_cat_id'];
+                    if ($subsubcatid) {
+                        $letter_type = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
+                    }
+                } elseif ($data['service_cat_id'] == 3) {
+                    $subsubcatid = $data['service_subsub_cat_id'];
+                    if ($subsubcatid) {
+                        $letter_type = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
+                    }
+                } else {
+                    $letter_type = '(Type of Letter)';
+                }
+                $reference_name = 'test';
+                $html = View::make(
+                    'admin.customer-drafts.customer_draft_pdf_rwa',
+                    [
+                        'applicant_first_name' => $data['applicant_first_name'],
+                        'applicant_last_name' => $data['applicant_last_name'],
+                        'applicant_email' => $data['applicant_email'],
 
-                // Execute the task
-                $myTask->execute();
+                        'applicant_address' => $data['applicant_address'],
+                        'applicant_country' => $data['applicant_country'],
+                        'applicant_state' => $data['applicant_state'],
+                        'applicant_city' => $data['applicant_city'],
 
-                // Define the path where the converted file will be saved
-                $convertedFilePath = storage_path('app/public/drafts/') . pathinfo($filePath, PATHINFO_FILENAME) . '.docx';
-                
-                // Download the converted file
-                $downloadUrl = $myTask->download(storage_path('app/public/drafts/'));
+                        'bank_name' => $bank_name,
+                        'bank_swift_code' => $bank_swift_code,
+                        'bank_address' => $bank_address,
 
-                return response()->download($convertedFilePath);
-                // Get the path of the converted Word file
-                // $wordPath = str_replace('.pdf', '.docx', storage_path('app/public/drafts/'));
+                        'beneficiary_first_name' => $data['beneficiary_first_name'],
+                        'beneficiary_last_name' => $data['beneficiary_last_name'],
+                        'beneficiary_email' => $data['beneficiary_email'],
 
-                // return response()->download($wordPath);
+                        'beneficiary_address' => $data['beneficiary_address'],
+                        'beneficiary_country' => $data['beneficiary_country'],
+                        'beneficiary_state' => $data['beneficiary_state'],
+                        'beneficiary_city' => $data['beneficiary_city'],
+
+                        'beneficiary_account_no' => $data['beneficiary_account_no'],
+                        'guarantee_amount' => $data['guarantee_amount'],
+                        'contract_no' => $data['contract_no'],
+                        'contract_date' => $data['contract_date'],
+                        'letter_type' => $letter_type,
+                        'reference' => $reference_name,
+                    ]
+                )->render();
+                // dd($html);
+
+                // Create a new PhpWord instance
+                $phpWord = new PhpWord();
+
+                $sectionStyle = [
+                    'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                    'marginBottom' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                    'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                    'marginRight' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                ];
+
+                // Load HTML content
+                $section = $phpWord->addSection($sectionStyle);
+                Html::addHtml($section, $html, false, false);
+
+                // Save the document as a .docx file
+                $filename = 'example.docx';
+                $filepath = storage_path('app/public/' . $filename);
+                $phpWord->save($filepath, 'Word2007');
+
+                // Return a download response or redirect as needed
+                return response()->download($filepath)->deleteFileAfterSend(true);
             } else {
                 // File does not exist in storage
-                return redirect()->back()->with('error', 'Draft PDF not found in storage');
+                return redirect()->back()->with('error', 'Draft PDF not generated...!!!');
             }
-        }
-        else{
-            return redirect()->back()->with('error', 'Not approved');
+        } else {
+            return redirect()->back()->with('error', 'Draft Not Approved Yet...!!!');
         }
     }
 }
