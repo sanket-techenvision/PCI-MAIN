@@ -63,6 +63,8 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::post('/get-dynamic-form', [CustomerDraftsController::class, 'getDynamicForm']);
     Route::get('/downloaddraft/{id}', [CustomerDraftsController::class, 'downloaddraft'])->name('customer-drafts.downloaddraft');
     Route::get('/downloaddraftword/{id}', [CustomerDraftsController::class, 'downloaddraftword'])->name('customer-drafts.downloaddraftword');
+    Route::post('/changerequestform', [CustomerDraftsController::class, 'changerequestform'])->name('changerequestform');
+    Route::post('/cofirmDraft', [CustomerDraftsController::class, 'cofirmDraft'])->name('customer.cofirmDraft');
 });
 
 
@@ -89,4 +91,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/get-customer-drafts/{id}', [AdminController::class, 'show'])->name('admin.drafts.view');
     Route::post('/approve-customer-draft', [AdminController::class, 'approve_customer_draft'])->name('admin.drafts.approve');
     Route::post('/reject-customer-drafs', [AdminController::class, 'reject_customer_draft'])->name('admin.drafts.reject');
+    Route::get('/admin_downloaddraft/{id}', [AdminController::class, 'downloaddraft'])->name('admin.drafts.downloaddraft');
+    Route::get('/admin_downloaddraftword/{id}', [AdminController::class, 'downloaddraftword'])->name('admin.drafts.downloaddraftword');
 });

@@ -68,7 +68,7 @@
     <div class="content px-3">
         <div class="card p-2 position-relative" style="overflow: hidden;">
             <div
-                class="status-ribbon 
+                class="status-ribbon text-capitalize
             @if ($approval_status == 'generated') status-approved 
             @elseif($approval_status == 'pending') status-pending 
             @elseif($approval_status == 'rejected') status-rejected @endif">

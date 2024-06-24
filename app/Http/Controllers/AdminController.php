@@ -15,7 +15,11 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Monolog\Formatter\JsonFormatter;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Shared\Html;
 
 class AdminController extends Controller
 {
@@ -113,7 +117,7 @@ class AdminController extends Controller
     {
         // Fetch the record by its ID
         $customerDraft = CustomerDrafts::find($request->id);
-
+        
         // Check if the record exists and the current status is 'pending' and not generated
         if ($customerDraft && $customerDraft->approval_status == 'pending'  && $customerDraft->approval_status != 'generated') {
             // Update the status to 'generated'
@@ -192,6 +196,7 @@ class AdminController extends Controller
 
             // Update the file_path after saving the PDF
             $customerDraft->file_path = 'public/' . $filename;
+            $customerDraft->reference_name = $reference_name;
             $customerDraft->save();
             $details = [
                 'subject' => 'Draft Generated Notice',
@@ -227,6 +232,104 @@ class AdminController extends Controller
             return redirect()->back()->with('success', 'The draft was rejected and a notification email was sent successfully.');
         } else {
             return redirect()->back()->with('error', 'Draft not found or already processed.');
+        }
+    }
+
+    public function downloaddraft($id)
+    {
+        return (CustomerDraftsController::downloaddraft($id));
+    }
+
+    public static function downloaddraftword($id)
+    {
+        // dd($id);
+        $data = CustomerDrafts::select('*')->where('id', $id)->where('approval_status', 'generated')->first();
+        if ($data) {
+
+            $pdfPath = $data['file_path'];
+
+            if (Storage::exists($pdfPath)) {
+                $bank_name = Banks::where('bank_id', $data['bank_id'])->first()->bank_name;
+                $bank_swift_code = Banks::where('bank_id', $data['bank_id'])->first()->bank_swift_code;
+                $bank_address = Banks::where('bank_id', $data['bank_id'])->first()->bank_address;
+                $letter_type = '';
+                $service_SubSub_Cats = ServiceSubSubCategory::all();
+                if ($data['service_cat_id'] == 1) {
+                    $subsubcatid = $data['service_subsub_cat_id'];
+                    if ($subsubcatid) {
+                        $letter_type = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
+                    }
+                } elseif ($data['service_cat_id'] == 3) {
+                    $subsubcatid = $data['service_subsub_cat_id'];
+                    if ($subsubcatid) {
+                        $letter_type = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
+                    }
+                } else {
+                    $letter_type = '(Type of Letter)';
+                }
+                $reference_name = 'test';
+                $html = View::make(
+                    'admin.customer-drafts.customer_draft_pdf_rwa',
+                    [
+                        'applicant_first_name' => $data['applicant_first_name'],
+                        'applicant_last_name' => $data['applicant_last_name'],
+                        'applicant_email' => $data['applicant_email'],
+
+                        'applicant_address' => $data['applicant_address'],
+                        'applicant_country' => $data['applicant_country'],
+                        'applicant_state' => $data['applicant_state'],
+                        'applicant_city' => $data['applicant_city'],
+
+                        'bank_name' => $bank_name,
+                        'bank_swift_code' => $bank_swift_code,
+                        'bank_address' => $bank_address,
+
+                        'beneficiary_first_name' => $data['beneficiary_first_name'],
+                        'beneficiary_last_name' => $data['beneficiary_last_name'],
+                        'beneficiary_email' => $data['beneficiary_email'],
+
+                        'beneficiary_address' => $data['beneficiary_address'],
+                        'beneficiary_country' => $data['beneficiary_country'],
+                        'beneficiary_state' => $data['beneficiary_state'],
+                        'beneficiary_city' => $data['beneficiary_city'],
+
+                        'beneficiary_account_no' => $data['beneficiary_account_no'],
+                        'guarantee_amount' => $data['guarantee_amount'],
+                        'contract_no' => $data['contract_no'],
+                        'contract_date' => $data['contract_date'],
+                        'letter_type' => $letter_type,
+                        'reference' => $reference_name,
+                    ]
+                )->render();
+                // dd($html);
+
+                // Create a new PhpWord instance
+                $phpWord = new PhpWord();
+
+                $sectionStyle = [
+                    'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                    'marginBottom' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                    'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                    'marginRight' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2),
+                ];
+
+                // Load HTML content
+                $section = $phpWord->addSection($sectionStyle);
+                Html::addHtml($section, $html, false, false);
+
+                // Save the document as a .docx file
+                $filename = 'example.docx';
+                $filepath = storage_path('app/public/' . $filename);
+                $phpWord->save($filepath, 'Word2007');
+
+                // Return a download response or redirect as needed
+                return response()->download($filepath)->deleteFileAfterSend(true);
+            } else {
+                // File does not exist in storage
+                return redirect()->back()->with('error', 'Draft PDF not generated...!!!');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Draft Not Approved Yet...!!!');
         }
     }
 }

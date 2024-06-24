@@ -10,6 +10,7 @@ class CustomerDrafts extends Model
 
     public $fillable = [
         'user_id',
+        'reference_name',
 
         'applicant_first_name',
         'applicant_last_name',
@@ -79,6 +80,7 @@ class CustomerDrafts extends Model
 
     public static array $rules = [
         'user_id' => 'required',
+        'reference_name' => 'required',
         'applicant_first_name' => 'required|string|max:255',
         'applicant_last_name' => 'required|string|max:255',
         'applicant_email' => 'required|string|max:255',
