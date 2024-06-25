@@ -1,5 +1,7 @@
 @extends('layouts.vertical', ['page_title'=> 'Service_Sub_Category'])
-
+@section('css')
+    @vite(['node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'])
+@endsection
 @section('content')
     <section class="content-header p-3">
         <div class="container-fluid">
@@ -29,3 +31,4 @@
     </div>
 
 @endsection
+@vite(['resources/js/pages/demo.datatable-init.js'])

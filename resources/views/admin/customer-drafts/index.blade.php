@@ -29,7 +29,7 @@
                                 <th>Date</th>
                                 <th>Draft Status</th>
                                 <th>Action</th>
-                                <th>Change Request</th>
+                                <th>Change Request/Confirm</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +52,7 @@
                                     <td class="align-middle text-center text-capitalize">
                                         <div class="text-uppercase fs-6 p-1"
                                             style="
-                                        @if ($draft['approval_status'] == 'pending') background-color: #ffc107 !important;
+                                        @if ($draft['approval_status'] == 'Pending') background-color: #ffc107 !important;
                                             color: #fff;
                                         @elseif ($draft['approval_status'] == 'generated')
                                             background-color: #27ae60 !important;
@@ -89,12 +89,17 @@
                                     {{-- Trigger change request modal / View Reason --}}
                                     <td class="align-middle text-center">
                                         <div class="btn-group">
-                                            @if ($draft['approval_status'] == 'generated')
+                                            @if ($draft['approval_status'] == 'generated' && $draft['applicant_confirmation'] != 'Confirmed')
                                                 <button class="btn btn-sm fs-6 text-dark" style="background-color: #ffc107;"
                                                     data-bs-toggle="modal" data-id="{{ $draft['id'] }}"
                                                     data-bs-target="#ChangeRequestModal"
                                                     data-approval-status = "{{ $draft['approval_status'] }}">
                                                     <i class="ri-arrow-up-down-line"></i>Change Request
+                                                </button>
+                                            @endif
+                                            @if ($draft['applicant_confirmation'] == 'Confirmed')
+                                                <button type="button" class="btn btn-sm btn-success">
+                                                    {{$draft['applicant_confirmation']}}
                                                 </button>
                                             @endif
                                         </div>

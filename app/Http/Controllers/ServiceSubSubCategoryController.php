@@ -11,6 +11,7 @@ use Laracasts\Flash\Flash;
 use App\Models\Service_Sub_Category;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\ServiceSubSubCategory;
+
 class ServiceSubSubCategoryController extends AppBaseController
 {
     /** @var ServiceSubSubCategoryRepository $serviceSubSubCategoryRepository*/
@@ -26,7 +27,7 @@ class ServiceSubSubCategoryController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $serviceSubSubCategories = $this->serviceSubSubCategoryRepository->paginate(10);
+        $serviceSubSubCategories = ServiceSubSubCategory::all();
         return view('service_sub_sub_categories.index')
             ->with('serviceSubSubCategories', $serviceSubSubCategories);
     }
@@ -53,7 +54,7 @@ class ServiceSubSubCategoryController extends AppBaseController
             'service_subsub_cat_description' => 'nullable|string|max:255',
             'service_subsub_cat_status' => 'required|string|in:active,inactive',
         ]);
-
+        
         try {
             $validatedData['service_subsub_cat_created_by'] = $authUserName;
             // dd($validatedData);

@@ -54,13 +54,13 @@
 <!-- Beneficiary Information Section -->
 <h3>Beneficiary Information</h3>
 <div class="col-lg-3">
-    <label for="beneficiary_first_name">Beneficiary First Name:</label>
+    <label for="beneficiary_first_name">Beneficiary Name:</label>
     <p>{{ $customerDrafts->beneficiary_first_name }}</p>
 </div>
-<div class="col-lg-3">
+<!-- <div class="col-lg-3">
     <label for="beneficiary_last_name">Beneficiary Last Name:</label>
     <p>{{ $customerDrafts->beneficiary_last_name }}</p>
-</div>
+</div> -->
 <div class="col-lg-3">
     <label for="beneficiary_email">Beneficiary Email:</label>
     <p>{{ $customerDrafts->beneficiary_email }}</p>

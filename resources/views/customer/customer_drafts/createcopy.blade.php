@@ -90,7 +90,7 @@
             </div>
 
             <!-- Payment Step -->
-            <div class="row step step-3" id="payment-gateway" style="display: none;">
+            <!-- <div class="row step step-3" id="payment-gateway" style="display: none;">
                 <div class="m-5">
                     <h3 class="text-center">PAYMENT</h3>
                     <input type="hidden" name="user_id" value="{{Auth::user()->user_id}}">
@@ -100,6 +100,26 @@
                         <a href="{{route('customer-drafts.create')}}"> <button type="button" class="btn btn-danger m-2">Payment Failed</button></a>
                     </div>
                     <button type="button" class="btn btn-secondary prev-button float-start" data-prev="2">Previous</button>
+                </div>
+            </div> -->
+            <div class="container mt-5">
+                <div class="card step step-3" id="payment-gateway" style="display: none;">
+                    <div class="card-header text-center">
+                        <h3>PAYMENT</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="user_id" value="{{Auth::user()->user_id}}">
+                        <div id="payment-success" class="text-center">
+                            <input type="hidden" name="payment_status" value="success">
+                            <button type="submit" class="btn btn-success m-2">Payment Successful!</button>
+                            <a href="{{route('customer-drafts.create')}}">
+                                <button type="button" class="btn btn-danger m-2">Payment Failed</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-start">
+                        <button type="button" class="btn btn-secondary prev-button" data-prev="2">Previous</button>
+                    </div>
                 </div>
             </div>
         </div>

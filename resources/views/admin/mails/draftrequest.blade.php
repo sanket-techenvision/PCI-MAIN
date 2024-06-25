@@ -14,7 +14,7 @@
     <p>A new draft/service/request has been submitted for approval. Here are the details:</p>
     
     <ul>
-        <li><strong>Requested By:</strong> {{ $details['requested_by'] }}</li>
+        <li><strong>Requested For:</strong> {{ $details['requested_by'] }}</li>
         <li><strong>Submitted By:</strong> {{ $details['submitted_by'] }}</li>
     </ul>
 

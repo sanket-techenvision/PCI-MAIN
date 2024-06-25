@@ -14,6 +14,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CustomerDraftsController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ChangeRequestDraftController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,6 +66,9 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/downloaddraftword/{id}', [CustomerDraftsController::class, 'downloaddraftword'])->name('customer-drafts.downloaddraftword');
     Route::post('/changerequestform', [CustomerDraftsController::class, 'changerequestform'])->name('changerequestform');
     Route::post('/cofirmDraft', [CustomerDraftsController::class, 'cofirmDraft'])->name('customer.cofirmDraft');
+
+    Route::get('/chat/messages/{draft_id}', [ChangeRequestDraftController::class, 'getMessages'])->name('chat.messages');
+    Route::post('/chat/send', [ChangeRequestDraftController::class, 'send'])->name('chat.send');
 });
 
 

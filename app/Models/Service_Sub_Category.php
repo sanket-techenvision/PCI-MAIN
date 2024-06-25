@@ -43,7 +43,7 @@ class Service_Sub_Category extends Model
     // }
     public function serviceCategory()
     {
-        return $this->belongsTo(Service_Category::class, 'service_cat_id', 'service_cat_id');
+        return $this->belongsTo(Service_Category::class, 'service_cat_id');
     }
     public function serviceSubSubCategories()
     {

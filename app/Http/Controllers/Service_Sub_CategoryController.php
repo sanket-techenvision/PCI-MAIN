@@ -25,7 +25,7 @@ class Service_Sub_CategoryController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $serviceSubCategories = $this->serviceSubCategoryRepository->paginate(10);
+        $serviceSubCategories = Service_Sub_Category::all();
 
         return view('service_sub_categories.index')
             ->with('serviceSubCategories', $serviceSubCategories);

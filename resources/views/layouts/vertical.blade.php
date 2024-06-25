@@ -7,6 +7,9 @@
     @include('layouts.shared/head-css', ['mode' => $mode ?? '', 'demo' => $demo ?? ''])
 
     @vite(['resources/js/head.js'])
+    @section('css')
+        @vite(['node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'])
+    @endsection
 </head>
 
 <body>

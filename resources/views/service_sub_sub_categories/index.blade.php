@@ -1,5 +1,7 @@
 @extends('layouts.vertical', ['page_title' => 'Services SubSub Category'])
-
+@section('css')
+    @vite(['node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'])
+@endsection
 @section('content')
     <section class="content-header p-3">
         <div class="container-fluid">
@@ -22,10 +24,9 @@
         @include('flash::message')
 
         <div class="clearfix"></div>
-
-        <div class="card">
+        <div class="card p-2">
             @include('service_sub_sub_categories.table')
         </div>
     </div>
-
+    @vite(['resources/js/pages/demo.datatable-init.js'])
 @endsection

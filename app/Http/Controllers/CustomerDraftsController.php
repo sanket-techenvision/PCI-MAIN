@@ -93,7 +93,7 @@ class CustomerDraftsController extends AppBaseController
         $input['beneficiary_state'] = State::where('id', $input['beneficiary_state'])->first()->name;
         $input['beneficiary_city'] = City::where('id', $input['beneficiary_city'])->first()->name;
 
-        // $customerDrafts = $this->customerDraftsRepository->create($input);
+        $customerDrafts = $this->customerDraftsRepository->create($input);
         $details = [
             'subject' => 'New Draft Request',
             'requested_by' => $input['applicant_first_name'] . ' ' . $input['applicant_last_name'],
@@ -212,8 +212,12 @@ class CustomerDraftsController extends AppBaseController
         // && in_array($subCategoryId, [1, 2, 3, 4]) && $subSubCategoryId == 37)
         $formFields = '';
         $currency = Currency::all();
-        if ($categoryId == 1) {
-            $formFields = view('customer.customer_drafts.forms.1A1', compact('countries', 'userdata', 'currency'))->render();
+        // if ($categoryId == 1) {
+        //     $formFields = view('customer.customer_drafts.forms.1A1', compact('countries', 'userdata', 'currency'))->render();
+        // }
+        // else
+        if ($categoryId == 1 && in_array($subSubCategoryId, [37, 56, 64, 70])) {
+            $formFields = view('customer.customer_drafts.forms.3A1', compact('countries', 'userdata', 'currency'))->render();
         } elseif ($categoryId == 2) {
             $formFields = view('customer.customer_drafts.forms.2A1', compact('countries', 'userdata', 'currency'))->render();
         } elseif ($categoryId == 3 && $subCategoryId == 8 && $subSubCategoryId == 7) {
@@ -280,7 +284,7 @@ class CustomerDraftsController extends AppBaseController
             return redirect()->back()->with('success', 'Draft confirmed successfully');
         }
         else{
-            return redirect()->back()->with('error', 'Draft Already Approved or Not Found');
+            return redirect()->back()->with('error', 'Draft Already Approved...!!!');
         }
     }
 }

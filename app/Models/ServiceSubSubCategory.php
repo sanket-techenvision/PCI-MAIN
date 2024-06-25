@@ -36,9 +36,9 @@ class ServiceSubSubCategory extends Model
         'service_subsub_cat_updated_by' => 'nullable|string|max:255'
     ];
 
-    public function serviceSubCat(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function serviceSubCat()
     {
-        return $this->belongsTo(\App\Models\ServiceSubCategory::class, 'service_sub_cat_id');
+        return $this->belongsTo(Service_Sub_Category::class, 'service_sub_cat_id');
     }
     public function serviceSubCategory()
     {

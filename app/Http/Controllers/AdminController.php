@@ -117,9 +117,9 @@ class AdminController extends Controller
     {
         // Fetch the record by its ID
         $customerDraft = CustomerDrafts::find($request->id);
-        
+        // dd($customerDraft);
         // Check if the record exists and the current status is 'pending' and not generated
-        if ($customerDraft && $customerDraft->approval_status == 'pending'  && $customerDraft->approval_status != 'generated') {
+        if ($customerDraft && $customerDraft->approval_status == 'Pending'  && $customerDraft->approval_status != 'generated') {
             // Update the status to 'generated'
             $customerDraft->approval_status = 'generated';
             $customerDraft->approve_notice = $request->approve_notice;
@@ -184,6 +184,7 @@ class AdminController extends Controller
                 'beneficiary_city' => $customerDraft['beneficiary_city'],
 
                 'beneficiary_account_no' => $customerDraft['beneficiary_account_no'],
+                'currency_code' => $customerDraft['currency_code'],
                 'guarantee_amount' => $customerDraft['guarantee_amount'],
                 'contract_no' => $customerDraft['contract_no'],
                 'contract_date' => $customerDraft['contract_date'],

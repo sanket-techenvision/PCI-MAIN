@@ -1,22 +1,22 @@
 <div class="card-body p-0">
     <div class="table-responsive">
-        <table class="table" id="service_-sub_-categories-table">
+        <table class="table" id="basic-datatable">
             <thead>
             <tr>
-                <th>Name</th>
+                <th>Service Cat Id</th>
+                <th>Sub Category Name</th>
                 <th>Description</th>
                 <th>Status</th>
-                <th>Service Cat Id</th>
                 <th>Action</th>
             </tr>
             </thead>
             <tbody>
             @foreach($serviceSubCategories as $serviceSubCategory)
                 <tr>
+                    <td>{{ $serviceSubCategory->serviceCategory->service_cat_name }}</td>
                     <td>{{ $serviceSubCategory->service_sub_cat_name }}</td>
                     <td>{{ $serviceSubCategory->service_sub_cat_description }}</td>
                     <td>{{ $serviceSubCategory->service_sub_cat_status }}</td>
-                    <td>{{ $serviceSubCategory->serviceCategory->service_cat_name }}</td>
                    <td  style="width: 120px">
                         {!! Form::open(['route' => ['service_sub_categories.destroy', $serviceSubCategory->service_sub_cat_id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
@@ -40,7 +40,7 @@
 
     <div class="card-footer clearfix">
         <div class="float-right">
-            @include('adminlte-templates::common.paginate', ['records' => $serviceSubCategories])
+            {{--@include('adminlte-templates::common.paginate', ['records' => $serviceSubCategories])--}}
         </div>
     </div>
 </div>
