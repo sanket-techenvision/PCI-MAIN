@@ -203,6 +203,7 @@ class AdminController extends Controller
                 'subject' => 'Draft Generated Notice',
                 'title' => 'Your draft has been generated',
                 'body' => 'Congratulations! Your draft has been generated. You can view the generated draft attached below.',
+                'notice' => $customerDraft->approve_notice,
             ];
             Mail::to($customerDraft->applicant_email)->send(new GenerateDraftMail($details, $filename));
 

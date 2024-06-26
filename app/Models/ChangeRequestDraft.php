@@ -13,6 +13,7 @@ class ChangeRequestDraft extends Model
         'sender_id',
         'receiver_id',
         'message',
+        'attachment',
         'sent_at',
         'created_by',
         'updated_by'

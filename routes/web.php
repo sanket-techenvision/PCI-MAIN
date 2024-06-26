@@ -66,12 +66,10 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/downloaddraftword/{id}', [CustomerDraftsController::class, 'downloaddraftword'])->name('customer-drafts.downloaddraftword');
     Route::post('/changerequestform', [CustomerDraftsController::class, 'changerequestform'])->name('changerequestform');
     Route::post('/cofirmDraft', [CustomerDraftsController::class, 'cofirmDraft'])->name('customer.cofirmDraft');
-
-    Route::get('/chat/messages/{draft_id}', [ChangeRequestDraftController::class, 'getMessages'])->name('chat.messages');
-    Route::post('/chat/send', [ChangeRequestDraftController::class, 'send'])->name('chat.send');
 });
 
-
+Route::get('/chat/messages/{draft_id}', [ChangeRequestDraftController::class, 'getMessages'])->name('chat.messages');
+Route::post('/chat/send', [ChangeRequestDraftController::class, 'send'])->name('chat.send');
 //****************************  Super Admin Routes  **********************************************//
 //*****************=============================================************************//
 Route::get('super-admin-login', function () {

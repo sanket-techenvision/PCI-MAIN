@@ -22,6 +22,7 @@ $(document).ready(function () {
         "next": "<i class='ri-arrow-right-s-line'>"
       }
     },
+    order: [[0, 'desc']],
     drawCallback: function () {
       $('#basic-datatable_paginate').addClass('pagination-rounded');
     }

@@ -1,3 +1,21 @@
+<style>
+    .file-input {
+        display: none;
+    }
+
+    #attachment-preview {
+        z-index: 1050;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+        margin: 0 auto;
+        text-align: center;
+        top: 10px;
+        left: 50%;
+    }
+</style>
 <div class="card-body p-1">
     <div class="table-responsive">
         <table class="table table-sm table-hover" id="basic-datatable">
@@ -16,72 +34,82 @@
             </thead>
             <tbody>
                 @foreach ($customerDrafts as $customerDrafts)
-                <tr>
-                    <td>{{ $customerDrafts->srno }}</td>
-                    <td>{{ $customerDrafts->service_category }}</td>
-                    <td>{{ $customerDrafts->service_sub_category }}</td>
-                    <td>{{ $customerDrafts->service_subsub_category }}</td>
-                    <td>{{ $customerDrafts->bank_name }}</td>
+                    <tr>
+                        <td>{{ $customerDrafts->srno }}</td>
+                        <td>{{ $customerDrafts->service_category }}</td>
+                        <td>{{ $customerDrafts->service_sub_category }}</td>
+                        <td>{{ $customerDrafts->service_subsub_category }}</td>
+                        <td>{{ $customerDrafts->bank_name }}</td>
 
-                    <td class="text-center align-middle" style="color: green">
-                        <i class="ri-money-dollar-circle-line fs-3"></i>
-                    </td>
-                    {{-- Draft Status --}}
-                    <td class="text-center align-middle">
-                        <div class="text-uppercase fs-6 p-1" style="
-                            @if ($customerDrafts->approval_status == 'Pending') background-color: #ffc107 !important;
-                                color: #fff;
-                            @elseif ($customerDrafts->approval_status == 'generated' && $customerDrafts->applicant_confirmation != 'confirmed')
-                                background-color: #27ae60 !important;
-                                color: #fff;
-                            @elseif ($customerDrafts->approval_status == 'rejected')
-                                background-color: #e74c3c !important;
-                                color: #fff; @endif">
-                            {{ $customerDrafts->approval_status }}
-                        </div>
-                    </td>
-                    {{-- View/download Draft --}}
-                    <td class="text-center align-middle">
-                        <div class='btn-group'>
-                            @if ($customerDrafts->approval_status != 'generated')
-                            <a href="{{ route('customer-drafts.show', [$customerDrafts->id]) }}" class="btn btn-sm" style="background-color: #3e60d5; color: #fff;">
-                                <i class="ri-eye-line"></i>
-                            </a>
+                        <td class="text-center align-middle" style="color: green">
+                            <i class="ri-money-dollar-circle-line fs-3"></i>
+                        </td>
+                        {{-- Draft Status --}}
+                        <td class="text-center align-middle">
+                            <div class="text-uppercase fs-6 p-1" style="
+                                    @if ($customerDrafts->approval_status == 'Pending') background-color: #ffc107 !important;
+                                        color: #fff;
+                                    @elseif ($customerDrafts->approval_status == 'generated' && $customerDrafts->applicant_confirmation != 'confirmed')
+                                        background-color: #27ae60 !important;
+                                        color: #fff;
+                                    @elseif ($customerDrafts->approval_status == 'rejected')
+                                        background-color: #e74c3c !important;
+                                    color: #fff; @endif">
+                                {{ $customerDrafts->approval_status }}
+                            </div>
+                        </td>
+                        {{-- View/download Draft --}}
+                        <td class="text-center align-middle">
+                            <div class='btn-group'>
+                                @if ($customerDrafts->approval_status != 'generated')
+                                    <a href="{{ route('customer-drafts.show', [$customerDrafts->id]) }}" class="btn btn-sm"
+                                        style="background-color: #3e60d5; color: #fff;">
+                                        <i class="ri-eye-line"></i>
+                                    </a>
+                                @endif
+                                @if ($customerDrafts->approval_status == 'generated')
+                                    <a href="{{ route('customer-drafts.downloaddraft', [$customerDrafts->id]) }}"
+                                        class="btn btn-sm" style="background-color: #3e60d5; color: #fff;">
+                                        <i class="ri-download-line"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        </td>
+
+                        <td class="text-center align-middle">
+                            <div class="btn-group">
+                                {{-- Trigger change request modal --}}
+                                @if ($customerDrafts->approval_status == 'generated' && $customerDrafts->applicant_confirmation != 'Confirmed')
+                                    <button class="btn btn-sm fs-6 text-dark" style="background-color: #ffc107;"
+                                        data-bs-toggle="modal" data-id="{{ $customerDrafts->id }}"
+                                        data-bs-target="#ChangeRequestModal"
+                                        data-approval-status="{{ $customerDrafts->approval_status }}">
+                                        <i class="ri-arrow-up-down-line"></i>Change Request
+                                    </button>
+                                    <button class="btn btn-sm btn-success fs-6" data-bs-toggle="modal"
+                                        data-id="{{ $customerDrafts->id }}" data-bs-target="#confirmDraftModal"
+                                        data-approval-status="{{ $customerDrafts->approval_status }}">
+                                        <i class="ri-arrow-up-line"></i>Confirm Draft
+                                    </button>
+                                @elseif($customerDrafts->approval_status == 'generated' && $customerDrafts->applicant_confirmation == 'Confirmed')
+                                    {{-- Trigger Confirmation modal --}}
+                                    <button class="btn btn-sm btn-success fs-6">
+                                        <i class="ri-check-line"></i> {{$customerDrafts->applicant_confirmation}}
+                                    </button>
+                                @endif
+                            </div>
+                            {{-- Trigger 'Reason for rejection' modal (if rejected) --}}
+                            @if ($customerDrafts->approval_status == 'rejected')
+                                <h3 class="text-center text-uppercase">
+                                    <button class="btn btn-primary btn-sm fs-6" data-bs-toggle="modal"
+                                        data-bs-target="#reasonModal" data-id="{{ $customerDrafts->id }}"
+                                        data-approval-status="{{ $customerDrafts->approval_status }}"
+                                        data-rejection-reason="{{ $customerDrafts->reason }}">View
+                                        Reason</button>
+                                </h3>
                             @endif
-                            @if ($customerDrafts->approval_status == 'generated')
-                            <a href="{{ route('customer-drafts.downloaddraft', [$customerDrafts->id]) }}" class="btn btn-sm" style="background-color: #3e60d5; color: #fff;">
-                                <i class="ri-download-line"></i>
-                            </a>
-                            @endif
-                        </div>
-                    </td>
-                    
-                    <td class="text-center align-middle">
-                        <div class="btn-group">
-                            {{-- Trigger change request modal --}}
-                            @if ($customerDrafts->approval_status == 'generated' && $customerDrafts->applicant_confirmation != 'Confirmed')
-                            <button class="btn btn-sm fs-6 text-dark" style="background-color: #ffc107;" data-bs-toggle="modal" data-id="{{ $customerDrafts->id }}" data-bs-target="#ChangeRequestModal" data-approval-status="{{ $customerDrafts->approval_status }}">
-                                <i class="ri-arrow-up-down-line"></i>Change Request
-                            </button>
-                            <button class="btn btn-sm btn-success fs-6" data-bs-toggle="modal" data-id="{{ $customerDrafts->id }}" data-bs-target="#confirmDraftModal" data-approval-status="{{ $customerDrafts->approval_status }}">
-                                <i class="ri-arrow-up-line"></i>Confirm Draft
-                            </button>
-                            @elseif($customerDrafts->approval_status == 'generated' && $customerDrafts->applicant_confirmation == 'Confirmed')
-                            {{-- Trigger Confirmation modal --}}
-                            <button class="btn btn-sm btn-success fs-6">
-                                <i class="ri-check-line"></i> {{$customerDrafts->applicant_confirmation}}
-                            </button>
-                            @endif
-                        </div>
-                        {{-- Trigger 'Reason for rejection' modal (if rejected) --}}
-                        @if ($customerDrafts->approval_status == 'rejected')
-                        <h3 class="text-center text-uppercase">
-                            <button class="btn btn-primary btn-sm fs-6" data-bs-toggle="modal" data-bs-target="#reasonModal" data-id="{{ $customerDrafts->id }}" data-approval-status="{{ $customerDrafts->approval_status }}" data-rejection-reason="{{ $customerDrafts->reason }}">View
-                                Reason</button>
-                        </h3>
-                        @endif
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
@@ -90,7 +118,8 @@
     {{-- ---------------------------------------------------------------------------------------------- --}}
     {{-- --------------------------------------- Modals ----------------------------------------------- --}}
     {{-- Rejection Reason Modal --}}
-    <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
+    <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -139,39 +168,43 @@
             </div>
         </div>
     </div> -->
+
     {{-- Change request modal --}}
-    <div class="modal modal-lg fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel" aria-hidden="true" data-draft-id="">
+    <div class="modal modal-lg fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel"
+        aria-hidden="true" data-draft-id="">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content m-2">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="ChangeRequestModalLabel">Change Request</h5>
-                    <button type="button" class="close btn btn-light" data-bs-dismiss="modal" aria-label="Close"><span class="fs-4">&times;</span></button>
+                    <button type="button" class="close btn btn-light" data-bs-dismiss="modal" aria-label="Close"><span
+                            class="fs-4">&times;</span></button>
                 </div>
                 <div class="row justify-content-center">
                     <!-- chat area -->
-                    <div class="col-xl-9 col-lg-8">
+                    <div class="col-xl-12 col-lg-12">
                         <div class="card">
                             <div class="card-body py-2 px-3 border-bottom border-light">
                                 <div class="row justify-content-between py-1">
                                     <div class="col-sm-7">
                                         <div class="d-flex align-items-start">
-                                            <img src="/images/users/avatar-1.jpg" class="me-2 rounded-circle" height="36" alt="Admin">
+                                            <img src="/images/users/avatar-1.jpg" class="me-2 rounded-circle"
+                                                height="36" alt="Admin">
                                             <div>
                                                 <h5 class="my-0 font-15">
                                                     <a href="#" class="text-reset">Admin</a>
                                                 </h5>
-                                                <p class="mt-1 mb-0 text-muted fs-12">
-                                                    <small class="ri-checkbox-blank-circle-fill text-danger"></small> Offline
-                                                </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-0">
-                                <ul class="conversation-list p-3" data-simplebar style="max-height: 520px;" id="chat-messages">
-                                    <!-- Chat messages will be appended here by JavaScript -->
+                            <div id="attachment-preview" class="mt-2"></div>
+                            <div class="card-body p-0" data-simplebar style="max-height: 200px;">
+                                <ul class="conversation-list p-3" id="chat-messages">
+                                    <!-- Chats -->
                                 </ul>
+                            </div>
+                            <div class="card-footer">
                                 <div class="row">
                                     <div class="col">
                                         <div class="bg-light p-3 rounded">
@@ -179,16 +212,27 @@
                                                 <div class="row">
                                                     <div class="col mb-2 mb-sm-0">
                                                         <input type="hidden" name="draft_id" id="draft_id">
-                                                        <input type="hidden" name="receiver_id" id="receiver_id" value="5">
-                                                        <input type="text" class="form-control border-0" placeholder="Enter your text" name="message" required id="chat-message" />
-                                                        <div class="invalid-feedback">
-                                                            Please enter your message
-                                                        </div>
+                                                        <input type="hidden" name="receiver_id" id="receiver_id"
+                                                            value="8">
+                                                        <input type="text" class="form-control border-0"
+                                                            placeholder="Enter your text" name="message" required
+                                                            id="chat-message" />
+                                                        @error('message')
+                                                            <div class="invalid-feedback">
+                                                                Please enter your message
+                                                            </div>
+                                                        @enderror
                                                     </div>
                                                     <div class="col-sm-auto">
                                                         <div class="btn-group">
-                                                            <a href="#" class="btn btn-light"><i class="ri-attachment-2"></i></a>
-                                                            <button type="submit" class="btn btn-success chat-send w-100"><i class="ri-send-plane-2-line"></i></button>
+                                                            <a href="#" class="btn btn-light" id="icon-click"><i
+                                                                    class="ri-attachment-2"></i></a>
+                                                            <input type="file" class="file-input" id="file-input"
+                                                                name="attachment"
+                                                                accept="application/pdf, image/*, .docx" max="5120">
+                                                            <button type="submit"
+                                                                class="btn btn-success chat-send w-100"><i
+                                                                    class="ri-send-plane-2-line"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -209,7 +253,8 @@
 {{-- End modal --}}
 
 {{-- Confirm Draft Modal --}}
-<div class="modal fade" id="confirmDraftModal" tabindex="-1" role="dialog" aria-labelledby="confirmDraftModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDraftModal" tabindex="-1" role="dialog" aria-labelledby="confirmDraftModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
@@ -263,14 +308,16 @@
         document.getElementById('chnageinrequest-error').style.display = 'none';
     });
 </script> -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+{{--<script>
+    document.addEventListener('DOMContentLoaded', function () {
         const chatModal = document.getElementById('ChangeRequestModal');
         const chatForm = document.getElementById('chat-form');
         const chatMessages = document.getElementById('chat-messages');
         const draftIdInput = document.getElementById('draft_id');
         const receiverIdInput = document.getElementById('receiver_id');
         const chatMessageInput = document.getElementById('chat-message');
+        const fileInput = document.getElementById('file-input');
+        const attachmentPreview = document.getElementById('attachment-preview');
 
         // Function to load chat messages for a specific draft
         function loadMessages(draftId) {
@@ -282,14 +329,42 @@
                         const messageHtml = `
                             <li class="clearfix ${message.sender_id == {{ Auth::id() }} ? 'odd' : ''}">
                                 <div class="chat-avatar">
-                                    <img src="/images/users/avatar-1.jpg" class="rounded" alt="${message.sender.name}" />
+                                    <img src="/images/users/avatar-1.jpg" class="rounded" alt="${message.sender.user_first_name}" />
                                     <i>${new Date(message.created_at).toLocaleTimeString()}</i>
                                 </div>
                                 <div class="conversation-text">
                                     <div class="ctext-wrap">
-                                        <i>${message.sender.name}</i>
+                                        <i>${message.sender.user_first_name}</i>
                                         <p>${message.message}</p>
+                                    </div>`;
+                        if (message.attachment) {
+                            const attachmentPath = `/storage/${message.attachment}`;
+                            const fileExtension = message.attachment.split('.').pop().toUpperCase();
+                            messageHtml += `
+                            <div class="card mt-2 mb-1 shadow-none border text-start">
+                                <div class="p-2">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <div class="avatar-sm">
+                                                <span class="avatar-title bg-primary rounded">
+                                                    ${fileExtension}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col ps-0">
+                                            <a href="${attachmentPath}" class="text-muted fw-bold" target="_blank">${message.attachment.split('/').pop()}</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <!-- Button -->
+                                            <a href="${attachmentPath}" class="btn btn-link btn-lg text-muted" download>
+                                                <i class="ri-download-2-line"></i>
+                                            </a>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>`;
+                        }
+                        messageHtml += `
                                 </div>
                                 <div class="conversation-actions dropdown">
                                     <button class="btn btn-sm btn-link fs-18" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill"></i></button>
@@ -306,11 +381,38 @@
         }
 
         // Event listener for modal open
-         // Event listener for modal open
         chatModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             var draftId = button.getAttribute('data-id');
             var approvalStatus = button.getAttribute('data-approval-status');
+
+            document.getElementById('icon-click').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default action for the link
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', function () {
+                attachmentPreview.innerHTML = ''; // Clear previous preview
+                const file = this.files[0];
+                if (file) {
+                    const fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        const fileUrl = e.target.result;
+                        let previewHtml;
+                        if (file.type.startsWith('image/')) {
+                            previewHtml = `<img src="${fileUrl}" class="img-thumbnail" alt="Attachment" style="max-width: 200px; max-height: 200px;">`;
+                        } else if (file.type === 'application/pdf') {
+                            previewHtml = `<embed src="${fileUrl}" type="application/pdf" width="200" height="200">`;
+                        } else {
+                            previewHtml = `<a href="${fileUrl}" target="_blank">${file.name}</a>`;
+                        }
+                        attachmentPreview.innerHTML = previewHtml;
+                        attachmentPreview.style.display = 'block'; // Show the attachment preview
+                        chatMessages.style.display = 'none'; // Hide the chat messages
+                    };
+                    fileReader.readAsDataURL(file);
+                }
+            });
 
             // Set the draft ID in the form input
             draftIdInput.value = draftId;
@@ -320,29 +422,171 @@
         });
 
         // Handle sending chat messages
-        chatForm.addEventListener('submit', function(e) {
+        chatForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(chatForm);
             fetch('/chat/send', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     chatForm.reset();
+                    attachmentPreview.innerHTML = ''; // Clear the preview after sending
+                    attachmentPreview.style.display = 'none'; // Hide the attachment preview
+                    fileInput.value = ''; // Clear the file input
+                    chatMessages.style.display = 'block'; // Show the chat messages
                     loadMessages(draftIdInput.value);
                 });
         });
     });
+</script>--}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const chatModal = document.getElementById('ChangeRequestModal');
+    const chatForm = document.getElementById('chat-form');
+    const chatMessages = document.getElementById('chat-messages');
+    const draftIdInput = document.getElementById('draft_id');
+    const receiverIdInput = document.getElementById('receiver_id');
+    const chatMessageInput = document.getElementById('chat-message');
+    const fileInput = document.getElementById('file-input');
+    const attachmentPreview = document.getElementById('attachment-preview');
+
+    // Function to load chat messages for a specific draft
+    function loadMessages(draftId) {
+        fetch(`/chat/messages/${draftId}`)
+            .then(response => response.json())
+            .then(messages => {
+                chatMessages.innerHTML = '';
+                messages.forEach(message => {
+                    let messageHtml = `
+                        <li class="clearfix ${message.sender_id == {{ Auth::id() }} ? 'odd' : ''}">
+                            <div class="chat-avatar">
+                                <img src="/images/users/avatar-1.jpg" class="rounded" alt="${message.sender.user_first_name}" />
+                                <i>${new Date(message.created_at).toLocaleTimeString()}</i>
+                            </div>
+                            <div class="conversation-text">
+                                <div class="ctext-wrap">
+                                    <i>${message.sender.user_first_name}</i>
+                                    <p>${message.message}</p>
+                                </div>`;
+                    
+                    if (message.attachment) {
+                        const attachmentPath = `/storage/${message.attachment.replace('storage/app/', '')}`;
+                        const fileExtension = message.attachment.split('.').pop().toUpperCase();
+                        messageHtml += `
+                            <div class="card mt-2 mb-1 shadow-none border text-start">
+                                <div class="p-2">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <div class="avatar-sm">
+                                                <span class="avatar-title bg-primary rounded">
+                                                    ${fileExtension}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col ps-0">
+                                            <a href="${attachmentPath}" class="text-muted fw-bold" target="_blank">${message.attachment.split('/').pop()}</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <!-- Button -->
+                                            <a href="${attachmentPath}" class="btn btn-link btn-lg text-muted" download>
+                                                <i class="ri-download-2-line"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                    }
+
+                    messageHtml += `
+                            </div>
+                            <div class="conversation-actions dropdown">
+                                <button class="btn btn-sm btn-link fs-18" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill"></i></button>
+                                <div class="dropdown-menu ${message.sender_id == {{ Auth::id() }} ? 'dropdown-menu-end' : ''}">
+                                    <a class="dropdown-item" href="#">Copy Message</a>
+                                    <a class="dropdown-item" href="#">Edit</a>
+                                    <a class="dropdown-item" href="#">Delete</a>
+                                </div>
+                            </div>
+                        </li>`;
+                    chatMessages.innerHTML += messageHtml;
+                });
+            });
+    }
+
+    // Event listener for modal open
+    chatModal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget;
+        var draftId = button.getAttribute('data-id');
+        var approvalStatus = button.getAttribute('data-approval-status');
+
+        document.getElementById('icon-click').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default action for the link
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const fileReader = new FileReader();
+                fileReader.onload = function(e) {
+                    const fileUrl = e.target.result;
+                    let previewHtml;
+                    if (file.type.startsWith('image/')) {
+                        previewHtml = `<img src="${fileUrl}" class="img-thumbnail" alt="Attachment" style="max-width: 200px; max-height: 200px;">`;
+                    } else if (file.type === 'application/pdf') {
+                        previewHtml = `<embed src="${fileUrl}" type="application/pdf" width="200" height="200">`;
+                    } else {
+                        previewHtml = `<a href="${fileUrl}" target="_blank">${file.name}</a>`;
+                    }
+                    attachmentPreview.innerHTML = previewHtml;
+                    attachmentPreview.style.display = 'block'; // Show the attachment preview
+                    chatMessages.style.display = 'none'; // Hide the chat messages
+                };
+                fileReader.readAsDataURL(file);
+            }
+        });
+
+        // Set the draft ID in the form input
+        draftIdInput.value = draftId;
+
+        // Load messages for this draft ID
+        loadMessages(draftId);
+    });
+
+    // Handle sending chat messages
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(chatForm);
+        fetch('/chat/send', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatForm.reset();
+                attachmentPreview.innerHTML = ''; // Clear the preview after sending
+                attachmentPreview.style.display = 'none'; // Hide the attachment preview
+                fileInput.value = ''; // Clear the file input
+                chatMessages.style.display = 'block'; // Show the chat messages
+                loadMessages(draftIdInput.value);
+            });
+    });
+});
+
 </script>
 
 {{-- Confirm Draft Script --}}
 <script>
     var confirmDraftModal = document.getElementById('confirmDraftModal');
-    confirmDraftModal.addEventListener('show.bs.modal', function(event) {
+    confirmDraftModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var draftId = button.getAttribute('data-id');
         var approvalStatus = button.getAttribute('data-approval-status');
@@ -354,7 +598,7 @@
         termsCheckbox.checked = false;
         confirmButton.disabled = true;
 
-        termsCheckbox.addEventListener('change', function() {
+        termsCheckbox.addEventListener('change', function () {
             confirmButton.disabled = !this.checked;
         });
     });
@@ -363,7 +607,7 @@
 {{-- RejectedReason Modal Script --}}
 <script>
     var reasonModal = document.getElementById('reasonModal');
-    reasonModal.addEventListener('show.bs.modal', function(event) {
+    reasonModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var rejectionReason = button.getAttribute('data-rejection-reason');
 
@@ -373,7 +617,7 @@
 </script>
 
 {{-- CKEditor Script --}}
-<script>
+<!-- <script>
     document.addEventListener("DOMContentLoaded", function() {
         CKEDITOR.replace('chnageinrequest');
 
@@ -391,6 +635,5 @@
             }
         });
     });
-</script>
+</script> -->
 {{-- --------------------------------------- Scripts End ------------------------------------------ --}}
-</div>

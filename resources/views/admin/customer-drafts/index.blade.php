@@ -170,7 +170,7 @@
     <!-- End Download Drafat Modal -->
 
     {{-- Chagne request modal --}}
-    <div class="modal modal-lg fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel"
+    <!-- <div class="modal modal-lg fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content m-2">
@@ -201,7 +201,74 @@
                 </form>
             </div>
         </div>
+    </div> -->
+
+    <div class="modal modal-lg fade" id="ChangeRequestModal" tabindex="-1" aria-labelledby="ChangeRequestModalLabel" aria-hidden="true" data-draft-id="">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content m-2">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="ChangeRequestModalLabel">Change Request</h5>
+                    <button type="button" class="close btn btn-light" data-bs-dismiss="modal" aria-label="Close"><span class="fs-4">&times;</span></button>
+                </div>
+                <div class="row justify-content-center">
+                    <!-- chat area -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card">
+                            <div class="card-body py-2 px-3 border-bottom border-light">
+                                <div class="row justify-content-between py-1">
+                                    <div class="col-sm-7">
+                                        <div class="d-flex align-items-start">
+                                            <img src="/images/users/avatar-1.jpg" class="me-2 rounded-circle" height="36" alt="Admin">
+                                            <div>
+                                                <h5 class="my-0 font-15">
+                                                    <a href="#" class="text-reset">Admin</a>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0" data-simplebar style="max-height: 200px;">
+                                <ul class="conversation-list p-3" id="chat-messages">
+                                    <!-- Chats -->
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="bg-light p-3 rounded">
+                                            <form class="needs-validation" novalidate="" name="chat-form" id="chat-form">
+                                                <div class="row">
+                                                    <div class="col mb-2 mb-sm-0">
+                                                        <input type="hidden" name="draft_id" id="draft_id">
+                                                        <input type="hidden" name="receiver_id" id="receiver_id" value="5">
+                                                        <input type="text" class="form-control border-0" placeholder="Enter your text" name="message" required id="chat-message" />
+                                                        @error('message')
+                                                        <div class="invalid-feedback">
+                                                            Please enter your message
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-sm-auto">
+                                                        <div class="btn-group">
+                                                            <a href="#" class="btn btn-light"><i class="ri-attachment-2"></i></a>
+                                                            <button type="submit" class="btn btn-success chat-send w-100"><i class="ri-send-plane-2-line"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end chat area -->
+                </div>
+            </div>
+        </div>
     </div>
+
     {{-- End modal --}}
 @endsection
 @section('script')
@@ -223,6 +290,81 @@
                     ':id', draftId);
             });
         });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatModal = document.getElementById('ChangeRequestModal');
+        const chatForm = document.getElementById('chat-form');
+        const chatMessages = document.getElementById('chat-messages');
+        const draftIdInput = document.getElementById('draft_id');
+        const receiverIdInput = document.getElementById('receiver_id');
+        const chatMessageInput = document.getElementById('chat-message');
+
+        // Function to load chat messages for a specific draft
+        function loadMessages(draftId) {
+            fetch(`/chat/messages/${draftId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    chatMessages.innerHTML = '';
+                    messages.forEach(message => {
+                        const messageHtml = `
+                            <li class="clearfix ${message.sender_id == {{ Auth::id() }} ? 'odd' : ''}">
+                                <div class="chat-avatar">
+                                    <img src="/images/users/avatar-1.jpg" class="rounded" alt="${message.sender.user_first_name}" />
+                                    <i>${new Date(message.created_at).toLocaleTimeString()}</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>${message.sender.user_first_name}</i>
+                                        <p>${message.message}</p>
+                                    </div>
+                                </div>
+                                <div class="conversation-actions dropdown">
+                                    <button class="btn btn-sm btn-link fs-18" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill"></i></button>
+                                    <div class="dropdown-menu ${message.sender_id == {{ Auth::id() }} ? 'dropdown-menu-end' : ''}">
+                                        <a class="dropdown-item" href="#">Copy Message</a>
+                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </li>`;
+                        chatMessages.innerHTML += messageHtml;
+                    });
+                });
+        }
+
+        // Event listener for modal open
+         // Event listener for modal open
+        chatModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var draftId = button.getAttribute('data-id');
+            var approvalStatus = button.getAttribute('data-approval-status');
+
+            // Set the draft ID in the form input
+            draftIdInput.value = draftId;
+
+            // Load messages for this draft ID
+            loadMessages(draftId);
+        });
+
+        // Handle sending chat messages
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(chatForm);
+            fetch('/chat/send', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    chatForm.reset();
+                    loadMessages(draftIdInput.value);
+                });
+        });
+    });
     </script>
     @vite(['resources/js/pages/demo.datatable-init.js'])
 @endsection

@@ -68,25 +68,36 @@ class ChangeRequestDraftController extends Controller
     {
         // dd($draft_id);
         $messages = ChangeRequestDraft::where('draft_id', $draft_id)->with(['sender', 'receiver'])->get();
+        // dd($messages);
         return response()->json($messages);
     }
 
     public function send(Request $request)
     {
+        // dd($request);
         $request->validate([
             'draft_id' => 'required|exists:customer_drafts,id',
             'receiver_id' => 'required|exists:users,user_id',
-            'message' => 'required|string',
+            'message' => 'nullable|string',
+            'attachment' => 'nullable|mimes:pdf,docx,jpeg,png,gif|max:5120',
         ]);
         $created_by = Auth::user()->user_id;
+
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('chatAttachments');
+        } else {
+            $attachmentPath = null; 
+        }
         $send = ChangeRequestDraft::create([
             'draft_id' => $request->draft_id,
             'sender_id' => Auth::user()->user_id,
             'receiver_id' => $request->receiver_id,
             'message' => $request->message,
+            'attachment' => $attachmentPath,
             'created_by' => $created_by,
             'updated-by' => '',
         ]);
+        
 
         return response()->json(['status' => 'Message sent!']);
     }
