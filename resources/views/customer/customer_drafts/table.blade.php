@@ -198,9 +198,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="attachment-preview" class="mt-2"></div>
-                            <div class="card-body p-0" data-simplebar style="max-height: 200px;">
-                                <ul class="conversation-list p-3" id="chat-messages">
+                            <div id="attachment-preview" class="mt-2" style="display:none"></div>
+                            <div class="card-body p-0" id="chat-scroll" data-simplebar data-simplebar-primary style="max-height: 200px;">
+                                <ul class="conversation-list p-3" id="chat-messages" >
                                     <!-- Chats -->
                                 </ul>
                             </div>
@@ -470,14 +470,17 @@
                             </div>
                             <div class="conversation-text">
                                 <div class="ctext-wrap">
-                                    <i>${message.sender.user_first_name}</i>
-                                    <p>${message.message}</p>
-                                </div>`;
+                                    <i>${message.sender.user_first_name}</i>`;
+
+                    if (message.message) {
+                        messageHtml += `<p>${message.message}</p>`;
+                    }
                     
                     if (message.attachment) {
-                        const attachmentPath = `/storage/${message.attachment.replace('storage/app/', '')}`;
-                        const fileExtension = message.attachment.split('.').pop().toUpperCase();
-                        messageHtml += `
+                        const attachmentPath = `/storage/${message.attachment}`;
+                        const fileName = message.attachment.split('/').pop(); // Extract file name
+                        const fileExtension = fileName.split('.').pop().toUpperCase(); // Extract file extension
+                        messageHtml += ` </div>
                             <div class="card mt-2 mb-1 shadow-none border text-start">
                                 <div class="p-2">
                                     <div class="row align-items-center">
@@ -489,11 +492,11 @@
                                             </div>
                                         </div>
                                         <div class="col ps-0">
-                                            <a href="${attachmentPath}" class="text-muted fw-bold" target="_blank">${message.attachment.split('/').pop()}</a>
+                                            <a href="${attachmentPath}" class="text-muted fw-bold" target="_blank">${fileName}</a>
                                         </div>
                                         <div class="col-auto">
                                             <!-- Button -->
-                                            <a href="${attachmentPath}" class="btn btn-link btn-lg text-muted" download>
+                                            <a href="${attachmentPath}" class="btn btn-link btn-lg text-muted" download="${fileName}">
                                                 <i class="ri-download-2-line"></i>
                                             </a>
                                         </div>
@@ -556,6 +559,13 @@
 
         // Load messages for this draft ID
         loadMessages(draftId);
+    });
+    // Event listener for modal close
+    chatModal.addEventListener('hide.bs.modal', function() {
+        attachmentPreview.innerHTML = ''; // Clear the preview
+        attachmentPreview.style.display = 'none'; // Hide the attachment preview
+        fileInput.value = ''; // Clear the file input
+        chatMessages.style.display = 'block'; // Show the chat messages
     });
 
     // Handle sending chat messages

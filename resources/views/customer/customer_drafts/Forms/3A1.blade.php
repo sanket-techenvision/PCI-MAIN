@@ -1,3 +1,5 @@
+{!! $breadCrumb !!}
+
 <!-- APPLICANT and Beneficiary DETAILS -->
 <h3 for="APPLICANT DETAILS">APPLICANT DETAILS</h3>
 <div class="row mb-3">
@@ -53,31 +55,26 @@
 
 <h3 for="BENEFICIARY DETAILS">BENEFICIARY DETAILS</h3>
 <div class="row">
-    <div class="col-6 mb-3">
-        <label for="beneficiary_first_name" class="form-label">Company Name<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_first_name') is-invalid @enderror" type="text" id="beneficiary_first_name" name="beneficiary_first_name" placeholder="Enter Company name" value="{{ old('beneficiary_first_name') }}" required>
-        @error('beneficiary_first_name')
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_company_name" class="form-label">Company Name<span class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_company_name') is-invalid @enderror" type="text" id="beneficiary_company_name" name="beneficiary_company_name" placeholder="Enter Company name" value="{{ old('beneficiary_company_name') }}" required>
+        @error('beneficiary_company_name')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-6 mb-3">
-        <!-- <label for="beneficiary_last_name" class="form-label">Last Name<span class="text-danger">*</span></label> -->
-        <input class="form-control @error('beneficiary_last_name') is-invalid @enderror" type="hidden" id="beneficiary_last_name" name="beneficiary_last_name" placeholder="Enter BENEFICIARY last name" value="company">
-        @error('beneficiary_last_name')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
-    <div class="col-6 mb-3">
+    <div class="col-md-6 mb-3">
         <label for="beneficiary_email" class="form-label">Beneficiary Email ID<span class="text-danger">*</span></label>
         <input class="form-control @error('beneficiary_email') is-invalid @enderror" type="email" id="beneficiary_email" name="beneficiary_email" placeholder="Enter BENEFICIARY Mail ID" value="{{ old('beneficiary_email') }}" required>
         @error('beneficiary_email')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-4 mb-3">
+    <div class="col-md-6 mb-3">
         <label for="beneficiary_address" class="form-label">Address<span class="text-danger">*</span></label>
         <input type="text" class="form-control  @error('beneficiary_address') is-invalid @enderror" id="beneficiary_address" name="beneficiary_address" placeholder="House No./ Building No./ Street / Locality" required></input>
     </div>
+</div>
+<div class="row">
     <div class="col-md-4 mb-3">
         <label for="beneficiary_country" class="form-label">Country<span class="text-danger">*</span></label>
         <select class="form-control select2" data-toggle="select2" id="beneficiary_country" name="beneficiary_country" required>
@@ -107,39 +104,25 @@
         @enderror
     </div>
     <div class="col-md-6 mb-3">
-        <label for="beneficiary_bank_name" class="form-label">Beneficiary Bank Name<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_bank_name') is-invalid @enderror" type="text" id="beneficiary_bank_name" name="beneficiary_bank_name" placeholder="Enter Beneficiary Bank Name" value="{{ old('beneficiary_bank_name') }}" required>
-        @error('beneficiary_bank_name')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+    <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
+    <div class="btn-group d-flex">
+        <select class="form-select select2 @error('currency_code') is-invalid @enderror me-2" data-toggle="select2" id="currency_code" name="currency_code" required>
+            <option value="" disabled selected>Select Currency</option>
+            @foreach ($currency as $currency)
+            <option value="{{ $currency->code }}" {{ old('currency_code') == $currency->code ? 'selected' : '' }}>
+                {{ $currency->code }} - {{ $currency->country }}
+            </option>
+            @endforeach
+        </select>
+        <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" min="1" required>
     </div>
-    <div class="col-md-6 mb-3">
-        <label for="beneficiary_bank_address" class="form-label">Beneficiary Bank Address<span class="text-danger">*</span></label>
-        <input class="form-control @error('beneficiary_bank_address') is-invalid @enderror" type="text" id="beneficiary_bank_address" name="beneficiary_bank_address" placeholder="Enter Beneficiary Bank Address" value="{{ old('beneficiary_bank_address') }}" required>
-        @error('beneficiary_bank_address')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="guarantee_amount" class="form-label">Guarantee Amount<span class="text-danger">*</span></label>
-        <div class="form-group">
-            <select class="form-select select2 @error('currency_code') is-invalid @enderror" data-toggle="select2" id="currency_code" name="currency_code" required>
-                <option value="" disabled selected>Select Currency</option>
-                @foreach ($currency as $currency)
-                <option value="{{ $currency->code }}" {{ old('currency_code') == $currency->code ? 'selected' : '' }}>{{ $currency->code }} -
-                    {{ $currency->country }}
-                </option>
-                @endforeach
-            </select>
-            <input class="form-control @error('guarantee_amount') is-invalid @enderror" type="number" id="guarantee_amount" name="guarantee_amount" placeholder="Enter Payment Guarantee Amount" value="{{ old('guarantee_amount') }}" min="1" required>
-        </div>
-        @error('guarantee_amount')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-        @error('currency_code')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
+    @error('guarantee_amount')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('currency_code')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
 </div>
 
@@ -153,24 +136,46 @@
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_bank_name" class="form-label">Beneficiary Bank Name<span class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_bank_name') is-invalid @enderror" type="text" id="beneficiary_bank_name" name="beneficiary_bank_name" placeholder="Enter Beneficiary Bank Name" value="{{ old('beneficiary_bank_name') }}" required>
+        @error('beneficiary_bank_name')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="beneficiary_bank_address" class="form-label">Beneficiary Bank Address<span class="text-danger">*</span></label>
+        <input class="form-control @error('beneficiary_bank_address') is-invalid @enderror" type="text" id="beneficiary_bank_address" name="beneficiary_bank_address" placeholder="Enter Beneficiary Bank Address" value="{{ old('beneficiary_bank_address') }}" required>
+        @error('beneficiary_bank_address')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 </div>
 
-<h3 for="ADVISING BANK">Contract DETAILS</h3>
+<h3 for="ADVISING BANK">CONTRACT DETAILS</h3>
 <div class="row">
-    <div class="col-md-6 mb-3">
-        <label for="contract_no" class="form-label">Contract Number<span class="text-danger">*</span></label>
+    <div class="col-md-5 mb-3">
+        <label for="project_name" class="form-label">Project Name<span class="text-danger">*</span></label>
+        <input class="form-control @error('project_name') is-invalid @enderror" type="text" id="project_name" name="project_name" placeholder="Project Name" value="{{ old('project_name') }}" required>
+        @error('project_name')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-5 mb-3">
+        <label for="contract_no" class="form-label">Contract Number (Between Applicant and Beneficiary)<span class="text-danger">*</span></label>
         <input class="form-control @error('contract_no') is-invalid @enderror" type="text" id="contract_no" name="contract_no" placeholder="Enter Contract Number" value="{{ old('contract_no') }}" required>
         @error('contract_no')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-2 mb-3">
         <label for="contract_date" class="form-label">Contract Date<span class="text-danger">*</span></label>
         <input class="form-control @error('contract_date') is-invalid @enderror" type="date" id="contract_date" name="contract_date" placeholder="Select Contract Date" value="{{ old('contract_date') }}" required max="{{ \Carbon\Carbon::today()->toDateString() }}">
         @error('contract_date')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+
 </div>
 
 <!-- Country/State/City -->
@@ -269,8 +274,7 @@
         var serviceSubSubCategory = $('#service_subsub_cat_id option:selected').text();
         var bank = $('#bank_id option:selected').text();
 
-        var beneficiaryFirstName = $('#beneficiary_first_name').val();
-        var beneficiaryLastName = $('#beneficiary_last_name').val();
+        var beneficiaryCompanyName = $('#beneficiary_company_name').val();
         var beneficiaryEmail = $('#beneficiary_email').val();
 
         var beneficiaryAddress = $('#beneficiary_address').val();
@@ -290,54 +294,10 @@
         var contractNo = $('#contract_no').val();
         var contractDate = $('#contract_date').val();
 
-        // Append data to preview content
-        // previewContent.append(`
-        //         <div class="card shadow">
-        //             <h4>Service Details</h4>
-        //             <table class="table table-striped">
-        //                 <tr><th>Service Category</th><td>${serviceCategory}</td></tr>
-        //                 <tr><th>Service Sub Category</th><td>${serviceSubCategory}</td></tr>
-        //                 <tr><th>Service Subsub Category</th><td>${serviceSubSubCategory}</td></tr>
-        //                 <tr><th>Issuer Bank</th><td>${bank}</td></tr>
-        //             </table>
-        //         <h4>Applicant Details</h4>
-        //             <table class="table table-striped">
-        //                 <tr><th>First Name</th><td>${applicantFirstName}</td></tr>
-        //                 <tr><th>Last Name</th><td>${applicantLastName}</td></tr>
-        //                 <tr><th>Email</th><td>${applicantEmail}</td></tr>
-        //                 <tr><th>Address</th><td>${applicantAddress}</td></tr>
-        //                 <tr><th>Country</th><td>${applicantCountry}</td></tr>
-        //                 <tr><th>State</th><td>${applicantState}</td></tr>
-        //                 <tr><th>City</th><td>${applicantCity}</td></tr>
-        //             </table>
-        //         <h4>Beneficiary Details</h4>
-        //             <table class="table table-striped">
-        //                 <tr><th>First Name</th><td>${beneficiaryFirstName}</td></tr>
-        //                 <tr><th>Last Name</th><td>${beneficiaryLastName}</td></tr>
-        //                 <tr><th>Email</th><td>${beneficiaryEmail}</td></tr>
-        //                 <tr><th>Address</th><td>${beneficiaryAddress}</td></tr>
-        //                 <tr><th>Country</th><td>${beneficiaryCountry}</td></tr>
-        //                 <tr><th>State</th><td>${beneficiaryState}</td></tr>
-        //                 <tr><th>City</th><td>${beneficiaryCity}</td></tr>
-        //                 <tr><th>Account No</th><td>${beneficiaryAccountNo}</td></tr>
-
-        //                 <tr><th>Beneficiary Bank Name</th><td>${beneficiaryBankName}</td></tr>
-        //                 <tr><th>Beneficiary Bank Address</th><td>${beneficiaryBankAddress}</td></tr>
-        //                 <tr><th>Guarantee Amount</th><td>${currencyCode} - ${guaranteeAmount}</td></tr>
-        //             </table>
-        //         <h4>Contract Details</h4>
-        //             <table class="table table-striped">
-        //                 <tr><th>Advising Swift Code</th><td>${advisingSwiftCode}</td></tr>
-        //                 <tr><th>Contract No</th><td>${contractNo}</td></tr>
-        //                 <tr><th>Contract Date</th><td>${contractDate}</td></tr>
-        //             </table>
-        //         </div>
-        //         `);
-        //}
         previewContent.append(`
-    <!-- Service Information Section -->
-    <h3>Service Information</h3>
-    <div class="row">
+        <!-- Service Information Section -->
+        <h3>Service Information</h3>
+        <div class="row">
         <div class="col-lg-3">
             <label for="serviceCategory">Service Category:</label>
             <p>${serviceCategory}</p>
@@ -393,8 +353,8 @@
     <h3>Beneficiary Details</h3>
     <div class="row">
         <div class="col-lg-3">
-            <label for="beneficiaryFirstName">Company Name:</label>
-            <p>${beneficiaryFirstName}</p>
+            <label for="beneficiaryCompanyName">Company Name:</label>
+            <p>${beneficiaryCompanyName}</p>
         </div>
         <div class="col-lg-3">
             <label for="beneficiaryEmail">Email:</label>
@@ -450,5 +410,6 @@
             <p>${contractDate}</p>
         </div>
     </div>
-`);}
+`);
+    }
 </script>

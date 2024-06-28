@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ChangeRequestDraft;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class ChangeRequestDraftController extends Controller
 {
@@ -68,7 +69,12 @@ class ChangeRequestDraftController extends Controller
     {
         // dd($draft_id);
         $messages = ChangeRequestDraft::where('draft_id', $draft_id)->with(['sender', 'receiver'])->get();
-        // dd($messages);
+        foreach ($messages as $index => $data) {
+            if ($data->message) {
+                $data->message = Crypt::decryptString($data->message);
+            }
+        }
+
         return response()->json($messages);
     }
 
@@ -84,20 +90,26 @@ class ChangeRequestDraftController extends Controller
         $created_by = Auth::user()->user_id;
 
         if ($request->hasFile('attachment')) {
-            $attachmentPath = $request->file('attachment')->store('chatAttachments');
+            $attachmentFile = $request->file('attachment');
+            $attachmentOriginalName = $attachmentFile->getClientOriginalName();
+            $attachmentPath = $attachmentFile->storeAs('public/chatAttachments', $attachmentOriginalName);
+            $attachmentPath = str_replace('public/', '', $attachmentPath);
         } else {
-            $attachmentPath = null; 
+            $attachmentPath = null;
+        }
+        if ($request->has('message')) {
+            $encryptedMessage = Crypt::encryptString($request->message);
         }
         $send = ChangeRequestDraft::create([
             'draft_id' => $request->draft_id,
             'sender_id' => Auth::user()->user_id,
             'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
+            'message' => $encryptedMessage,
             'attachment' => $attachmentPath,
             'created_by' => $created_by,
             'updated-by' => '',
         ]);
-        
+
 
         return response()->json(['status' => 'Message sent!']);
     }

@@ -113,84 +113,77 @@ class AdminController extends Controller
         return view('admin.customer-drafts.index', compact('data'));
     }
 
+    public static function convertNumberToWords($number)
+    {
+        $formatter = new \NumberFormatter('en', \NumberFormatter::SPELLOUT);
+        $words = $formatter->format($number);
+        return strtoupper($words);
+    }
+
     public function approve_customer_draft(Request $request)
     {
         // Fetch the record by its ID
         $customerDraft = CustomerDrafts::find($request->id);
-        // dd($customerDraft);
+
         // Check if the record exists and the current status is 'pending' and not generated
         if ($customerDraft && $customerDraft->approval_status == 'Pending'  && $customerDraft->approval_status != 'generated') {
+
             // Update the status to 'generated'
             $customerDraft->approval_status = 'generated';
             $customerDraft->approve_notice = $request->approve_notice;
-
             $customerDraft->save();
 
             $bank_name = Banks::where('bank_id', $customerDraft['bank_id'])->first()->bank_name;
             $bank_swift_code = Banks::where('bank_id', $customerDraft['bank_id'])->first()->bank_swift_code;
             $bank_address = Banks::where('bank_id', $customerDraft['bank_id'])->first()->bank_address;
-
-            $letter_type = '';
             $service_SubSub_Cats = ServiceSubSubCategory::all();
-            if ($customerDraft['service_cat_id'] == 1) {
-                $subsubcatid = $customerDraft['service_subsub_cat_id'];
-                if ($subsubcatid) {
-                    $letter_type = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
-                }
-            } elseif ($customerDraft['service_cat_id'] == 3) {
-                $subsubcatid = $customerDraft['service_subsub_cat_id'];
-                if ($subsubcatid) {
-                    $letter_type = ServiceSubSubCategory::where('service_subsub_cat_id', $subsubcatid)->first()->service_subsub_cat_name;
-                }
-            } else {
-                $letter_type = '(Type of Letter)';
-            }
+            $amount_in_words = $this->convertNumberToWords($customerDraft['guarantee_amount']);
 
+            // Set reference no to draft copy
             $currentDate = Carbon::now()->format('Y-m-d_H-i-s');
             $startOfDay = Carbon::now()->startOfDay();
             $endOfDay = Carbon::now()->endOfDay();
             $ref_1 = Country::select('sortname')->where('name', $customerDraft['applicant_country'])->first()->sortname;
             $ref_2 = Service_Category::where('service_cat_id', $customerDraft['service_cat_id'])->first()->short_name;
             $ref_3 = Carbon::now()->format('d');
-            $ref_4 = CustomerDrafts::whereBetween('created_at', [$startOfDay, $endOfDay])->count();
+            $ref_4 = CustomerDrafts::whereBetween('updated_at', [$startOfDay, $endOfDay])->count();
             $ref_5 = Carbon::now()->format('my');
             $ref_6 = ServiceSubSubCategory::where('service_subsub_cat_id', $customerDraft['service_subsub_cat_id'])->first()->short_name;
-            $ref_7 = $customerDraft->applicant_first_name;
-            $reference_name = $ref_1 . '/' . $ref_2 . '/' . $ref_3 . '-' . $ref_4 . '/' . $ref_5 . '.' . $ref_6 . '.' . $ref_7;
+            $reference_name = $ref_1 . '/' . $ref_2 . '/' . $ref_3 . '-' . $ref_4 . '/' . $ref_5 . '.' . $ref_6;
             $reference_name = 'REF : ' . $reference_name;
+
             // dd($reference_name);
             // dd($customerDraft);
-            $pdf = PDF::loadView('admin.customer-drafts.customer_draft_pdf_rwa', [
-                'applicant_first_name' => $customerDraft['applicant_first_name'],
-                'applicant_last_name' => $customerDraft['applicant_last_name'],
-                'applicant_email' => $customerDraft['applicant_email'],
 
-                'applicant_address' => $customerDraft['applicant_address'],
-                'applicant_country' => $customerDraft['applicant_country'],
-                'applicant_state' => $customerDraft['applicant_state'],
-                'applicant_city' => $customerDraft['applicant_city'],
+            $data = array_merge(
+                $customerDraft->where('id', $request->id)->first()->toArray(),
+                [
+                    'bank_name' => $bank_name,
+                    'bank_swift_code' => $bank_swift_code,
+                    'bank_address' => $bank_address,
+                    'reference' => $reference_name,
+                    'amount_in_words' => $amount_in_words,
+                ]
+            );
 
-                'bank_name' => $bank_name,
-                'bank_swift_code' => $bank_swift_code,
-                'bank_address' => $bank_address,
-
-                'beneficiary_first_name' => $customerDraft['beneficiary_first_name'],
-                'beneficiary_last_name' => $customerDraft['beneficiary_last_name'],
-                'beneficiary_email' => $customerDraft['beneficiary_email'],
-
-                'beneficiary_address' => $customerDraft['beneficiary_address'],
-                'beneficiary_country' => $customerDraft['beneficiary_country'],
-                'beneficiary_state' => $customerDraft['beneficiary_state'],
-                'beneficiary_city' => $customerDraft['beneficiary_city'],
-
-                'beneficiary_account_no' => $customerDraft['beneficiary_account_no'],
-                'currency_code' => $customerDraft['currency_code'],
-                'guarantee_amount' => $customerDraft['guarantee_amount'],
-                'contract_no' => $customerDraft['contract_no'],
-                'contract_date' => $customerDraft['contract_date'],
-                'letter_type' => $letter_type,
-                'reference' => $reference_name,
-            ]);
+            // Dynamic PDF load view based on category
+            if ($customerDraft['service_cat_id'] == 1 && $customerDraft['service_sub_cat_id'] == 1 &&  in_array($customerDraft['service_subsub_cat_id'], [1, 2, 3, 4, 5, 6])) {
+                // RWA->HardCopy->All BG (1-6)
+                $bgType = ServiceSubSubCategory::select('service_subsub_cat_name')->where('service_subsub_cat_id', $data['service_subsub_cat_id'])->first()->service_subsub_cat_name;
+                $data['bgType'] = $bgType;
+                $pdf = PDF::loadView('admin.customer-drafts.draftblades.1A1', $data);
+            } elseif ($customerDraft['service_cat_id'] == 1 && $customerDraft['service_sub_cat_id'] == 1 &&  $customerDraft['service_subsub_cat_id'] == 7) {
+                // RWA->HardCopy->DLC
+                $pdf = PDF::loadView('admin.customer-drafts.draftblades.1A7', $data);
+            } elseif ($customerDraft['service_cat_id'] == 1 && $customerDraft['service_sub_cat_id'] == 1 &&  $customerDraft['service_subsub_cat_id'] == 8) {
+                // RWA->HardCopy->SBLC
+                $pdf = PDF::loadView('admin.customer-drafts.draftblades.1A8', $data);
+            } elseif ($customerDraft['service_cat_id'] == 3 && $customerDraft['service_sub_cat_id'] == 8 &&  $customerDraft['service_subsub_cat_id'] == 39) {
+                // BG->MT760->Performance Bond Guarantee
+                $pdf = PDF::loadView('admin.customer-drafts.draftblades.3A1', $data);
+            }
+            // dd($pdf);
+            // return $pdf->stream('jj');
             $filename = 'customer_draft_' . $customerDraft['applicant_first_name'] . '_' . $customerDraft['applicant_last_name'] . '_'  . $currentDate . '.pdf';
             $pdfPath = storage_path('app/public/' . $filename);
             $pdf->save($pdfPath);
@@ -215,6 +208,7 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Draft Not Found...!');
         }
     }
+
     public function reject_customer_draft(Request $request)
     {
         // dd($request );
@@ -271,7 +265,7 @@ class AdminController extends Controller
                 }
                 $reference_name = 'test';
                 $html = View::make(
-                    'admin.customer-drafts.customer_draft_pdf_rwa',
+                    'admin.customer-drafts.1A1',
                     [
                         'applicant_first_name' => $data['applicant_first_name'],
                         'applicant_last_name' => $data['applicant_last_name'],
@@ -286,8 +280,7 @@ class AdminController extends Controller
                         'bank_swift_code' => $bank_swift_code,
                         'bank_address' => $bank_address,
 
-                        'beneficiary_first_name' => $data['beneficiary_first_name'],
-                        'beneficiary_last_name' => $data['beneficiary_last_name'],
+                        'beneficiary_company_name' => $data['beneficiary_company_name'],
                         'beneficiary_email' => $data['beneficiary_email'],
 
                         'beneficiary_address' => $data['beneficiary_address'],
@@ -299,7 +292,9 @@ class AdminController extends Controller
                         'guarantee_amount' => $data['guarantee_amount'],
                         'contract_no' => $data['contract_no'],
                         'contract_date' => $data['contract_date'],
+                        'currency_code' => $data['currency_code'],
                         'letter_type' => $letter_type,
+                        'bgType' => $letter_type,
                         'reference' => $reference_name,
                     ]
                 )->render();

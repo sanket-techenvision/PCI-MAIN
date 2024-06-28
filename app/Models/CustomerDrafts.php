@@ -26,8 +26,7 @@ class CustomerDrafts extends Model
         'service_subsub_cat_id',
         'bank_id',
 
-        'beneficiary_first_name',
-        'beneficiary_last_name',
+        'beneficiary_company_name',
         'beneficiary_email',
 
         'beneficiary_address',
@@ -45,7 +44,7 @@ class CustomerDrafts extends Model
         'advising_swift_code',
         'contract_no',
         'contract_date',
-
+        'project_name',
         'payment_status',
         'approval_status',
 
@@ -66,8 +65,7 @@ class CustomerDrafts extends Model
         'service_sub_cat_id' => 'string',
         'service_subsub_cat_id' => 'string',
         'bank_id' => 'string',
-        'beneficiary_first_name' => 'string',
-        'beneficiary_last_name' => 'string',
+        'beneficiary_company_name' => 'string',
         'beneficiary_email' => 'string',
         'beneficiary_address' => 'string',
         'beneficiary_country' => 'string',
@@ -75,7 +73,8 @@ class CustomerDrafts extends Model
         'beneficiary_city' => 'string',
         'beneficiary_account_no' => 'string',
         'guarantee_amount' => 'string',
-        'payment_status' => 'string'
+        'payment_status' => 'string',
+        'project_name' => 'string',
     ];
 
     public static array $rules = [
@@ -95,8 +94,7 @@ class CustomerDrafts extends Model
         'service_subsub_cat_id' => 'nullable|string|max:255',
         'bank_id' => 'required|string|max:255',
 
-        'beneficiary_first_name' => 'required|string|max:255',
-        'beneficiary_last_name' => 'required|string|max:255',
+        'beneficiary_company_name' => 'required|string|max:255',
         'beneficiary_email' => 'required|string|max:255',
 
         'beneficiary_address' => 'required|string|max:255',
@@ -110,9 +108,10 @@ class CustomerDrafts extends Model
         'currency_code' => 'required|string|max:255',
         'guarantee_amount' => 'required|string|max:255',
 
-        'advising_swift_code' =>  'required|string|max:255',
+        'advising_swift_code' =>  'nullable|string|max:255',
         'contract_no' => 'required|string|max:255',
         'contract_date' => 'required|string|max:255',
+        'project_name' => 'nullable|string|max:255',
         
         'payment_status' => 'required|string|max:255',
 

@@ -32,11 +32,12 @@
 </head>
 <body>
     <div class="container">
+        <p><b>RWA HC DRAFT</b></p>
         <p>REFERENCE NUMBER: [TO BE FILLED BY ISSUIANG BNK]</p>
         <p>ISSUING DATE: [TO BE FILLED BY ISSUING BANK]</p>
 
         <h4>BENEFICIARY</h4>
-        <p>Name: <span style="color: red;">{{ $beneficiary_first_name }} {{ $beneficiary_last_name }}</span></p>
+        <p>Name: <span style="color: red;">{{ $beneficiary_company_name }}</span></p>
         <p>Address: <span style="color: red;">{{ $beneficiary_address }}, {{ $beneficiary_city }}, {{ $beneficiary_state }}, {{ $beneficiary_country }}</span></p>
         <p>Email: <span style="color: red;">{{ $beneficiary_email }}</span></p>
 
@@ -50,9 +51,9 @@
 
         <p style="margin-bottom: 20px;">DEAR SIRS,</p>
         <p>WE, <span style="color: red;">{{ $bank_name }}, {{ $bank_address }}</span>, AT THE REQUEST OF OUR CLIENT <span style="color: red;">{{ $applicant_first_name }} {{ $applicant_last_name }}, {{ $applicant_address }}, {{ $applicant_city }}, {{ $applicant_state }}, {{ $applicant_country }}</span></p>
-        <p>HEREBY CONFIRM WITH FULL FINANCIAL RESPONSIBILITY THAT WE ARE READY WILLING AND ABLE TO ISSUE A <span style="color: red;">{{ $letter_type }}</span> REFERENCE TO CONTRACT NO. {{$contract_no}} DATED {{$contract_date}} WITH FACE VALUE <span style="color: red;">{{ $currency_code }} {{ $guarantee_amount }} </span> ONLY IN FAVOUR OF <span style="color: red;">{{ $beneficiary_first_name }}, {{ $beneficiary_address }}, {{ $beneficiary_city }}, {{ $beneficiary_state }}, {{ $beneficiary_country }}</span> IN YOUR GOOD BANK, AND IT SHALL BE TRANSMITTED BY SWIFT MT760.</p>
+        <p>HEREBY CONFIRM WITH FULL FINANCIAL RESPONSIBILITY THAT WE ARE READY WILLING AND ABLE TO ISSUE A <span style="color: red;">LETTER OF CREDIT</span> REFERENCE TO CONTRACT NO. {{$contract_no}} DATED {{$contract_date}} WITH FACE VALUE <span style="color: red;">{{ $currency_code }} {{ $guarantee_amount }} </span> IN FAVOUR OF <span style="color: red;">{{ $beneficiary_company_name }}, {{ $beneficiary_address }}, {{ $beneficiary_city }}, {{ $beneficiary_state }}, {{ $beneficiary_country }}</span> IN YOUR GOOD BANK, AND IT SHALL BE TRANSMITTED BY SWIFT MT700.</p>
 
-        <p>WE FURTHER CONFIRM THAT THE STANDBY LETTER OF CREDIT IS FREE AND CLEARED OF ENCUMBRANCE AND THE CASH IS GOOD, CLEAN AND CLEAR FUNDS OF NON-CRIMINAL ORIGINS.</p>
+        <p>WE FURTHER CONFIRM THAT <span style="color: red;">LETTER OF CREDIT</span> IS FREE AND CLEARED OF ENCUMBRANCE AND THE CASH IS GOOD, CLEAN AND CLEAR FUNDS OF NON-CRIMINAL ORIGINS.</p>
         <p>THE AUTHENTICITY AND VALIDITY OF THIS BANK RWA LETTER CAN BE VERIFIED AND CONFIRMED BY BELOW BANK AND TO THE UNDERSIGNED OFFICERS:</p>
         
         <p>BANK: <span style="color: red;">{{$bank_name}}</span></p>

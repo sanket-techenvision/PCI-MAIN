@@ -121,16 +121,9 @@
                 <h3 for="BENEFICIARY DETAILS">BENEFICIARY DETAILS</h3>
                 <div class="row">
                     <div class="col-6 mb-3">
-                        <label for="beneficiary_first_name" class="form-label">First Name<span class="text-danger">*</span></label>
-                        <input class="form-control @error('beneficiary_first_name') is-invalid @enderror" type="text" id="beneficiary_first_name" name="beneficiary_first_name" placeholder="Enter BENEFICIARY first name" value="{{ old('beneficiary_first_name') }}" required>
-                        @error('beneficiary_first_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-6 mb-3">
-                        <label for="beneficiary_last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
-                        <input class="form-control @error('beneficiary_last_name') is-invalid @enderror" type="text" id="beneficiary_last_name" name="beneficiary_last_name" placeholder="Enter BENEFICIARY last name" value="{{ old('beneficiary_last_name') }}" required>
-                        @error('beneficiary_last_name')
+                        <label for="beneficiary_company_name" class="form-label">First Name<span class="text-danger">*</span></label>
+                        <input class="form-control @error('beneficiary_company_name') is-invalid @enderror" type="text" id="beneficiary_company_name" name="beneficiary_company_name" placeholder="Enter BENEFICIARY first name" value="{{ old('beneficiary_company_name') }}" required>
+                        @error('beneficiary_company_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -449,8 +442,7 @@
                 var serviceSubCategory = $('#service_sub_cat_id option:selected').text();
                 var serviceSubSubCategory = $('#service_subsub_cat_id option:selected').text();
                 var bank = $('#bank_id option:selected').text();
-                var beneficiaryFirstName = $('#beneficiary_first_name').val();
-                var beneficiaryLastName = $('#beneficiary_last_name').val();
+                var beneficiaryCompanyName = $('#beneficiary_company_name').val();
                 var beneficiaryEmail = $('#beneficiary_email').val();
                 var beneficiaryAddress = $('#beneficiary_address').val();
                 var beneficiaryCountry = $('#beneficiary_country option:selected').text();
@@ -479,8 +471,7 @@
                 </table>
                 <h4>Beneficiary Details</h4>
                 <table class="table table-striped">
-                    <tr><th>First Name</th><td>${beneficiaryFirstName}</td></tr>
-                    <tr><th>Last Name</th><td>${beneficiaryLastName}</td></tr>
+                    <tr><th>First Name</th><td>${beneficiaryCompanyName}</td></tr>
                     <tr><th>Email</th><td>${beneficiaryEmail}</td></tr>
                     <tr><th>Address</th><td>${beneficiaryAddress}</td></tr>
                     <tr><th>Country</th><td>${beneficiaryCountry}</td></tr>

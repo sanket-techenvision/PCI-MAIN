@@ -204,24 +204,35 @@ class CustomerDraftsController extends AppBaseController
         $subCategoryId = $request['subCategoryId'];
         $subSubCategoryId = $request['subSubCategoryId'];
         $bankId = $request['bankId'];
+
+        $categoryName = Service_Category::where('service_cat_id', $categoryId)->first()->service_cat_name;
+        $subCategoryName = Service_Sub_Category::where('service_sub_cat_id', $subCategoryId)->first()->service_sub_cat_name;
+        $subSubCategoryName = ServiceSubSubCategory::where('service_subsub_cat_id', $subSubCategoryId)->first()->service_subsub_cat_name;
+        $bankName = Banks::where('bank_id', $bankId)->first()->bank_name;
+
         $countries = Country::all();
+        $currency = Currency::all();
         $user = Auth::user();
         $userdata['stateid'] = State::where('name', $user['user_state'])->first()->id;
         $userdata['cityid'] = City::where('name', $user['user_city'])->first()->id;
 
-        // && in_array($subCategoryId, [1, 2, 3, 4]) && $subSubCategoryId == 37)
         $formFields = '';
-        $currency = Currency::all();
-        // if ($categoryId == 1) {
-        //     $formFields = view('customer.customer_drafts.forms.1A1', compact('countries', 'userdata', 'currency'))->render();
-        // }
-        // else
-        if ($categoryId == 1 && in_array($subSubCategoryId, [37, 56, 64, 70])) {
-            $formFields = view('customer.customer_drafts.forms.3A1', compact('countries', 'userdata', 'currency'))->render();
+        $breadCrumb = '<nav aria-label="breadcrumb" style="display:flex; justify-content: start;">
+                    <ol class="breadcrumb text-center">
+                        <li class="breadcrumb-item"><h4 style="display: inline;"><a href="#">' . $categoryName . '</a></h4></li>
+                        <li class="breadcrumb-item"><h4 style="display: inline;"><a href="#">' . $subCategoryName . '</a></h4></li>
+                        <li class="breadcrumb-item active" aria-current="page"><h4 style="display: inline;">' . $subSubCategoryName . '</h4></li>
+                    </ol>
+                </nav>';
+
+        if ($categoryId == 1 && in_array($subSubCategoryId, [1, 2, 3, 4, 5, 6, 7, 8])) {
+            // Form For all RWA->Hard Copy
+            $formFields = view('customer.customer_drafts.forms.1A1', compact('countries', 'userdata', 'currency', 'breadCrumb'))->render();
         } elseif ($categoryId == 2) {
-            $formFields = view('customer.customer_drafts.forms.2A1', compact('countries', 'userdata', 'currency'))->render();
-        } elseif ($categoryId == 3 && $subCategoryId == 8 && $subSubCategoryId == 7) {
-            $formFields = view('customer.customer_drafts.forms.3A1', compact('countries', 'userdata', 'currency'))->render();
+            $formFields = view('customer.customer_drafts.forms.2A1', compact('countries', 'userdata', 'currency', 'breadCrumb'))->render();
+        } elseif ($categoryId == 3 && $subCategoryId == 8 && $subSubCategoryId == 39) {
+            // Form for BG->Performance Bond
+            $formFields = view('customer.customer_drafts.forms.3A1', compact('countries', 'userdata', 'currency', 'breadCrumb'))->render();
         } else {
             // Handle other cases or return a default form
             $formFields = '<p id="disable_next">No form available for the selected options.</p>';
@@ -282,8 +293,7 @@ class CustomerDraftsController extends AppBaseController
             $draft['applicant_confirmation'] = 'Confirmed';
             $draft->save();
             return redirect()->back()->with('success', 'Draft confirmed successfully');
-        }
-        else{
+        } else {
             return redirect()->back()->with('error', 'Draft Already Approved...!!!');
         }
     }
